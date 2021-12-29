@@ -1,9 +1,9 @@
 import React from 'react';
 
-export default function Home(props) {
+export default function Browse(props) {
   return (
     <div>
-      Home page
+      Browse page
     </div>
   );
 }
