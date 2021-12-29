@@ -1,12 +1,52 @@
 require('dotenv/config');
+const pg = require('pg');
 const express = require('express');
+const ClientError = require('./client-error');
 const errorMiddleware = require('./error-middleware');
 const staticMiddleware = require('./static-middleware');
+
+const db = new pg.Pool(
+  {
+    connectionString: process.env.DATABASE_URL,
+    ssl: { rejectUnauthorized: false }
+
+  }
+);
+
+const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+  'July', 'August', 'September', 'October', 'November', 'December'];
 
 const app = express();
 
 app.use(staticMiddleware);
 
+app.use(express.json({ limit: '500mb' }));
+
+app.post('/api/doodle', (req, res, next) => {
+  let { title, caption, dataUrl } = req.body;
+  const userId = 1;// update when adding user auth
+  if (!dataUrl) {
+    throw new ClientError(400, 'dataUrl required');
+  }
+  if (!caption) {
+    caption = '';
+  }
+  if (!title || !title.length) {
+    const date = new Date();
+    title = `${monthNames[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
+  }
+  const sql = `insert into "doodles" ("title", "caption", "dataUrl", "userId")
+  values ($1, $2, $3, $4)
+  returning *;`;
+  const params = [title, caption, dataUrl, userId];
+  db.query(sql, params)
+    .then(result => {
+      res.json(result.rows[0]);
+    })
+    .catch(error => {
+      next(error);
+    });
+});
 app.use(errorMiddleware);
 
 app.listen(process.env.PORT, () => {
