@@ -130,21 +130,21 @@ input::placeholder {
   text-align: center;
   border-bottom: 2px solid rgba(255, 255, 255, 0.12);
   margin-bottom: 5rem;
+  color: white;
 }
 
 .submit-title:focus {
   border-bottom: 2px solid rgba(100, 100, 100, 0.8);
-  color: white;
 }
 
 .submit-caption {
   border-radius: 3rem;
   background: rgba(255, 255, 255, 0.05);
   padding: 1rem 2rem;
+  color: white;
 }
 
 .submit-caption:focus {
-  color: white;
   background: rgba(255, 255, 255, 0.1);
 }
 

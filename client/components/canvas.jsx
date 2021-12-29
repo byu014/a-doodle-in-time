@@ -1,4 +1,5 @@
 import React from 'react';
+import AppContext from '../lib/app-context';
 
 export default class Canvas extends React.Component {
   constructor(props) {
@@ -22,7 +23,7 @@ export default class Canvas extends React.Component {
   componentDidMount() {
     this.ctx = this.canvasRef.current.getContext('2d');
     window.addEventListener('mouseup', this.handleMouseUp);// required since cannot detect mouseup outside of canvas
-    // this.canvasRef.current.addEventListener('touchstart', this.handleOnTouchStart);
+    this.context.dataUrl = this.canvasRef.current.toDataURL();
   }
 
   handleMouseMove(event) {
@@ -49,6 +50,7 @@ export default class Canvas extends React.Component {
 
   handleMouseUp(event) {
     this.setState({ isDrawing: false, lastX: null, lastY: null, isMouseDown: false });
+    this.context.dataUrl = this.canvasRef.current.toDataURL();
   }
 
   draw(event) {
@@ -99,3 +101,5 @@ export default class Canvas extends React.Component {
     );
   }
 }
+
+Canvas.contextType = AppContext;
