@@ -22,6 +22,7 @@ export default class Canvas extends React.Component {
   componentDidMount() {
     this.ctx = this.canvasRef.current.getContext('2d');
     window.addEventListener('mouseup', this.handleMouseUp);// required since cannot detect mouseup outside of canvas
+    // this.canvasRef.current.addEventListener('touchstart', this.handleOnTouchStart);
   }
 
   handleMouseMove(event) {
@@ -64,11 +65,19 @@ export default class Canvas extends React.Component {
     this.setState({ lastX: x, lastY: y });
   }
 
-  getMousePos(canvas, evt) {
+  // translates clientX and clientY to proper x and y on canvas
+  // if statement to determine if user is touching screen vs using mouse
+  getMousePos(canvas, event) {
     const rect = canvas.getBoundingClientRect();
+    if (event.touches) {
+      return {
+        x: (event.touches[0].clientX - rect.left) / (rect.right - rect.left) * canvas.width,
+        y: (event.touches[0].clientY - rect.top) / (rect.bottom - rect.top) * canvas.height
+      };
+    }
     return {
-      x: (evt.clientX - rect.left) / (rect.right - rect.left) * canvas.width,
-      y: (evt.clientY - rect.top) / (rect.bottom - rect.top) * canvas.height
+      x: (event.clientX - rect.left) / (rect.right - rect.left) * canvas.width,
+      y: (event.clientY - rect.top) / (rect.bottom - rect.top) * canvas.height
     };
   }
 
@@ -79,6 +88,9 @@ export default class Canvas extends React.Component {
         onMouseDown={this.handleMouseDown}
         onMouseLeave={this.handleMouseLeave}
         onMouseEnter={this.handleMouseEnter}
+        onTouchMove={this.handleMouseMove}
+        onTouchStart={this.handleMouseDown}
+        onTouchEnd={this.handleMouseUp}
         ref={this.canvasRef}
         width='1920'
         height='1440'

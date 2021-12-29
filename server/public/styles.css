@@ -20,6 +20,7 @@ canvas {
   margin: 1rem 0;
   box-shadow: 0 4px 30px 20px rgba(0, 0, 0, 0.1);
   user-select: none;
+  touch-action: none;
 }
 
 header {
@@ -129,8 +130,6 @@ input::placeholder {
   text-align: center;
   border-bottom: 2px solid rgba(255, 255, 255, 0.12);
   margin-bottom: 5rem;
-
-  /* width: 100%; */
 }
 
 .submit-title:focus {
