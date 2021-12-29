@@ -1,0 +1,222 @@
+.hidden {
+  display: none;
+}
+
+.container {
+  min-width: 600px;
+  padding: 1rem;
+  margin: 0 auto;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.col-half {
+  width: 50%;
+}
+
+.col-full {
+  width: 100%;
+}
+
+.col-30 {
+  width: 100%;
+}
+
+.col-70 {
+  width: 100%;
+}
+
+.col-50 {
+  width: 100%;
+}
+
+.nav-items {
+  display: none;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+}
+
+.drawer-sandwich {
+  display: flex;
+  align-items: center;
+  justify-content: end;
+}
+
+.drawer-navs {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 80%;
+}
+
+.drawer-menu-header {
+  display: flex;
+  justify-content: center;
+  padding: 2rem 0;
+}
+
+.drawer-nav-items {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.drawer-user-options {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.create {
+  display: flex;
+}
+
+.canvas-and-tools {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.submission-form {
+  display: flex;
+  flex-direction: column;
+  padding-left: 3.5rem;
+  padding-right: 3.5rem;
+}
+
+canvas {
+  width: 500px;
+}
+
+.button-flex {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.tool-picker {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.art-tools {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.art-sliders {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#opacity {
+  width: 18rem;
+}
+
+#size {
+  width: 18rem;
+}
+
+.art-slider-div {
+  display: flex;
+}
+
+@media screen and (min-width: 640px) {
+  .container {
+    max-width: 730px;
+  }
+
+  canvas {
+    width: 600px;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .container {
+    max-width: 900px;
+  }
+
+  .nav-items {
+    display: flex;
+    align-items: center;
+    justify-content: end;
+  }
+
+  .drawer-sandwich {
+    display: none;
+  }
+
+  canvas {
+    width: 700px;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .container {
+    min-width: 1300px;
+    max-width: 1920px;
+  }
+
+  .col-30 {
+    width: 30%;
+  }
+
+  .col-70 {
+    width: 70%;
+  }
+
+  .col-50 {
+    width: 50%;
+  }
+
+  .button-flex {
+    justify-content: end;
+    align-items: flex-end;
+  }
+
+  .create {
+    flex-direction: row;
+  }
+
+  canvas {
+    width: 850px;
+  }
+
+  .submission-form {
+    padding-left: 2.5;
+    padding-right: 2.5rem;
+  }
+
+  .tool-picker {
+    flex-direction: row;
+    justify-content: space-between;
+    max-width: 900px;
+  }
+
+  .art-tools {
+    justify-content: flex-start;
+    padding-right: 3rem;
+    min-width: 410px;
+  }
+
+  .art-sliders {
+    align-items: flex-end;
+  }
+
+  #opacity {
+    width: 15rem;
+  }
+
+  #size {
+    width: 15rem;
+  }
+}
