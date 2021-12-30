@@ -8,7 +8,7 @@ export default class Edit extends React.Component {
   constructor(props) {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.state = { dataUrl: null, caption: null, title: null };
+    this.state = { dataUrl: null, caption: null, title: null, isError: false };
   }
 
   async componentDidMount() {
@@ -20,6 +20,7 @@ export default class Edit extends React.Component {
         title: response.data.title
       });
     } catch (error) {
+      this.setState({ isError: true });
       console.error(error);
     }
   }
@@ -30,7 +31,16 @@ export default class Edit extends React.Component {
     const title = event.target.title.value;
     const { dataUrl } = this.context;
     if (event.nativeEvent.submitter.matches('[name="delete"]')) {
-      // todo
+      try {
+        const response = await axios.delete(`/api/doodle/${this.props.doodleId}`);
+        this.setState({
+          dataUrl: response.data.dataUrl,
+          caption: response.data.caption,
+          title: response.data.title
+        });
+      } catch (error) {
+        console.error(error);
+      }
     } else if (event.nativeEvent.submitter.matches('[name="update"]')) {
       try {
         await axios.patch(`/api/doodle/${this.props.doodleId}`, { caption, title, dataUrl }, {
@@ -39,12 +49,17 @@ export default class Edit extends React.Component {
           }
         });
       } catch (error) {
+        this.setState({ isError: true });
         console.error(error);
       }
     }
   }
 
+  // TODO assign disabled dynamically to inputs later
   render() {
+    if (this.state.isError) {
+      return <div>Doodle does not exist or was deleted</div>;
+    }
     if (!this.state.dataUrl) {
       return <div>loading...</div>;
     }

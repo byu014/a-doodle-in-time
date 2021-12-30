@@ -103,6 +103,26 @@ app.patch('/api/doodle/:doodleId', (req, res, next) => {
     .catch(error => next(error));
 });
 
+app.delete('/api/doodle/:doodleId', (req, res, next) => {
+  let { doodleId } = req.params;
+  doodleId = Number.parseInt(doodleId);
+  if (!Number.isInteger(doodleId)) {
+    throw new ClientError(400, 'doodleId must be an integer');
+  }
+  const sql = `delete from "doodles" where "doodleId" = $1
+    returning *;`;
+  const params = [doodleId];
+
+  db.query(sql, params)
+    .then(result => {
+      if (!result.rows.length) {
+        throw new ClientError(404, `cannot find doodle with doodleId ${doodleId}`);
+      }
+      res.json(result.rows[0]);
+    })
+    .catch(error => next(error));
+});
+
 app.use(errorMiddleware);
 
 app.listen(process.env.PORT, () => {
