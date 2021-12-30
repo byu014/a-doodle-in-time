@@ -44,7 +44,14 @@ export default class App extends React.Component {
   }
 
   render() {
-    const contextValue = { dataUrl: null };
+    const contextValue = {
+      dataUrl: null,
+      color: '#000000',
+      opacity: 1,
+      size: 10,
+      undoStack: [],
+      redoStack: []
+    };
     return (
       <AppContext.Provider value={contextValue}>
 

@@ -21,6 +21,9 @@ export default class Canvas extends React.Component {
   }
 
   componentDidMount() {
+    this.context.canvasRef = this.canvasRef;
+    this.context.undoStack = [];
+    this.context.redoStack = [];
     this.ctx = this.canvasRef.current.getContext('2d');
     if (this.props.dataUrl) {
       const img = new Image();
@@ -29,7 +32,7 @@ export default class Canvas extends React.Component {
       }.bind(this);
       img.src = this.props.dataUrl;
     }
-    this.context.dataUrl = this.props.dataUrl ? this.props.dataurl : this.canvasRef.current.toDataURL();
+    this.context.dataUrl = this.props.dataUrl ? this.props.dataUrl : this.canvasRef.current.toDataURL();
     window.addEventListener('mouseup', this.handleMouseUp);// required since cannot detect mouseup outside of canvas
   }
 
@@ -41,7 +44,14 @@ export default class Canvas extends React.Component {
   }
 
   handleMouseLeave(event) { // prevents drawing line along edge when mouse reenters canvas from where mouse left
+    if (this.state.isDrawing) {
+      this.context.undoStack.push(this.context.dataUrl);
+      this.context.redoStack = [];
+    }
     this.setState({ isDrawing: false, lastX: null, lastY: null });
+    if (this.canvasRef.current) {
+      this.context.dataUrl = this.canvasRef.current.toDataURL();
+    }
   }
 
   handleMouseEnter(event) {
@@ -51,24 +61,60 @@ export default class Canvas extends React.Component {
   }
 
   handleMouseDown(event) {
+    if (event.button !== 0) return;
+    if (event.type !== 'mousedown') {
+      return;
+    }
     this.setState({ isDrawing: true, isMouseDown: true });
     this.draw(event);// allows users to draw dots or else requires dragging motion to draw
   }
 
   handleMouseUp(event) {
+    if (this.state.isDrawing) {
+      this.context.undoStack.push(this.context.dataUrl);
+      this.context.redoStack = [];
+    }
     this.setState({ isDrawing: false, lastX: null, lastY: null, isMouseDown: false });
-    this.context.dataUrl = this.canvasRef.current.toDataURL();
+    if (this.canvasRef.current) {
+      this.context.dataUrl = this.canvasRef.current.toDataURL();
+    }
+  }
+
+  distance(x1, y1, x2, y2) {
+    return Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2);
   }
 
   draw(event) {
-    this.ctx.lineWidth = 10;
     this.ctx.beginPath();// prevents jagged path by restarting path with every call to draw
-    if (this.state.lastX && this.state.lastY) { // prevents gaps from drawing too fast
-      this.ctx.moveTo(this.state.lastX, this.state.lastY);
-
-    }
-    this.ctx.lineCap = 'round';
     const { x, y } = this.getMousePos(this.canvasRef.current, event);
+    const { lineStyle } = this.context;
+    this.ctx.lineWidth = this.context.size;
+    this.ctx.lineCap = 'round';
+    this.ctx.globalAlpha = this.context.drawingUtensil === 'pen' ? this.context.opacity : 1;
+    this.ctx.strokeStyle = this.context.drawingUtensil === 'pen' ? this.context.color : 'white';
+
+    if (this.state.lastX && this.state.lastY) { // prevents gaps from drawing too fast
+      const distance = this.distance(this.state.lastX, this.state.lastY, x, y);
+      if (lineStyle === 0) {
+        this.ctx.moveTo(this.state.lastX, this.state.lastY);
+      }
+      if (lineStyle === 1) {
+        if (distance < this.context.size && lineStyle === 1) {
+          return;
+        }
+        this.ctx.moveTo(x, y);
+      }
+      if (lineStyle === 2) {
+        this.ctx.moveTo(x + (x - this.state.lastX) * (0.5 * distance), y + (y - this.state.lastY) * (0.5 * distance));
+      }
+    }
+    if (lineStyle === 3) {
+      const canvas = this.canvasRef.current;
+      const rect = canvas.getBoundingClientRect();
+      const midX = (rect.right - rect.left) / 2 / (rect.right - rect.left) * canvas.width;
+      const midY = (rect.bottom - rect.top) / 2 / (rect.bottom - rect.top) * canvas.height;
+      this.ctx.moveTo(midX, midY);
+    }
     this.ctx.lineTo(x, y);
     this.ctx.stroke();
     this.setState({ lastX: x, lastY: y });
@@ -93,13 +139,14 @@ export default class Canvas extends React.Component {
   render() {
     return (
       <canvas
+        onMouseUp={this.handleMouseUp}
         onMouseMove={this.handleMouseMove}
         onMouseDown={this.handleMouseDown}
         onMouseLeave={this.handleMouseLeave}
         onMouseEnter={this.handleMouseEnter}
         onTouchMove={this.handleMouseMove}
         onTouchStart={this.handleMouseDown}
-        onTouchEnd={this.handleMouseUp}
+        onTouchEnd={this.handleMouseUp }
         ref={this.canvasRef}
         width='1920'
         height='1440'
