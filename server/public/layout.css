@@ -136,6 +136,11 @@ canvas {
   display: flex;
 }
 
+.dash-toggle-div {
+  display: flex;
+  align-items: center;
+}
+
 @media screen and (min-width: 640px) {
   .container {
     max-width: 730px;

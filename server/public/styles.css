@@ -173,6 +173,7 @@ input::placeholder {
   height: 3rem;
 }
 
+.dash-toggle-div > *,
 .art-slider-div > * {
   margin: 1rem 0.3rem;
 }
@@ -215,11 +216,54 @@ input[type="range"]:active::-webkit-slider-runnable-track {
 }
 
 input[type="color"]::-webkit-color-swatch {
-  border: none;
+  border: 3px solid black;
   border-radius: 0.5rem;
+}
+
+input[type="color"]:hover {
+  cursor: pointer;
 }
 
 .button-flex,
 .button-flex-edit * {
   margin: 1rem 0;
+}
+
+.art-tool-btn {
+  border-radius: 2rem;
+  box-shadow: 0 20px 20px 0 rgba(0, 0, 0, 0.1);
+}
+
+.art-tool-btn:hover {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.art-tool-btn:active {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.dash-toggle {
+  background: rgba(128, 128, 128, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 10rem;
+  border-radius: 3rem;
+  color: inherit;
+}
+
+.dash-toggle:hover {
+  background: rgba(128, 128, 128, 1);
+}
+
+.dash-toggle:active {
+  background: rgba(100, 100, 100, 1);
+}
+
+.selected-utensil {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.art-tool-btn i {
+  pointer-events: none;
 }
