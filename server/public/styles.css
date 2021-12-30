@@ -101,6 +101,13 @@ a:hover {
   color: white;
 }
 
+.red-outline-btn {
+  box-shadow: 0 4px 40px 20px rgba(0, 0, 0, 0.1);
+  border: 1px solid red;
+  background-color: none;
+  color: red;
+}
+
 .text-shadow {
   text-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
 }
@@ -210,4 +217,9 @@ input[type="range"]:active::-webkit-slider-runnable-track {
 input[type="color"]::-webkit-color-swatch {
   border: none;
   border-radius: 0.5rem;
+}
+
+.button-flex,
+.button-flex-edit * {
+  margin: 1rem 0;
 }

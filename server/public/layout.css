@@ -100,6 +100,12 @@ canvas {
   justify-content: center;
 }
 
+.button-flex-edit {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
 .tool-picker {
   display: flex;
   flex-direction: column;
@@ -181,6 +187,13 @@ canvas {
   .button-flex {
     justify-content: end;
     align-items: flex-end;
+  }
+
+  .button-flex-edit {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-end;
+    height: 100%;
   }
 
   .create {

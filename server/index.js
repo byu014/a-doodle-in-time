@@ -47,6 +47,62 @@ app.post('/api/doodle', (req, res, next) => {
       next(error);
     });
 });
+
+app.get('/api/doodle/:doodleId', (req, res, next) => {
+  let { doodleId } = req.params;
+  doodleId = Number.parseInt(doodleId);
+  if (!Number.isInteger(doodleId)) {
+    throw new ClientError(400, 'doodleId must be an integer');
+  }
+  const sql = 'select * from "doodles" where "doodleId" = $1;';
+  const params = [doodleId];
+
+  db.query(sql, params)
+    .then(result => {
+      if (!result.rows.length) {
+        throw new ClientError(404, `cannot find doodle with doodleId ${doodleId}`);
+      }
+      res.json(result.rows[0]);
+    })
+    .catch(error => next(error));
+});
+
+app.patch('/api/doodle/:doodleId', (req, res, next) => {
+  let { doodleId } = req.params;
+  let { title, caption, dataUrl } = req.body;
+
+  if (!dataUrl) {
+    throw new ClientError(400, 'dataUrl required');
+  }
+  if (!caption) {
+    caption = '';
+  }
+  if (!title || !title.length) {
+    const date = new Date();
+    title = `${monthNames[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
+  }
+
+  doodleId = Number.parseInt(doodleId);
+  if (!Number.isInteger(doodleId)) {
+    throw new ClientError(400, 'doodleId must be an integer');
+  }
+
+  const sql = `update "doodles"
+  set "caption" = $2, "title" = $3, "dataUrl" = $4
+  where "doodleId" = $1
+  returning *;`;
+  const params = [doodleId, caption, title, dataUrl];
+
+  db.query(sql, params)
+    .then(result => {
+      if (!result.rows.length) {
+        throw new ClientError(404, `cannot find doodle with doodleId ${doodleId}`);
+      }
+      res.json(result.rows[0]);
+    })
+    .catch(error => next(error));
+});
+
 app.use(errorMiddleware);
 
 app.listen(process.env.PORT, () => {

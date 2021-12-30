@@ -3,6 +3,7 @@ import Home from './pages/home';
 import NotFound from './pages/not-found';
 import Create from './pages/create';
 import Browse from './pages/browse';
+import Edit from './pages/edit';
 import AppContext from './lib/app-context';
 import { parseRoute } from './lib';
 import { Navbar } from './components';
@@ -12,11 +13,6 @@ export default class App extends React.Component {
     super(props);
     this.state = {
       route: parseRoute(window.location.hash)
-    };
-    this.pages = {
-      '': <Home />,
-      create: <Create />,
-      browse: <Browse />
     };
   }
 
@@ -33,8 +29,18 @@ export default class App extends React.Component {
 
   renderPage() {
     const { route } = this.state;
-
-    return this.pages[route.path] ? this.pages[route.path] : <NotFound />;
+    switch (route.path) {
+      case '':
+        return <Home />;
+      case 'create':
+        return <Create/>;
+      case 'browse':
+        return <Browse />;
+      case 'edit':
+        return <Edit doodleId={route.params.get('doodleId')}/>;
+      default:
+        return <NotFound/>;
+    }
   }
 
   render() {
