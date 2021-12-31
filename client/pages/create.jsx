@@ -3,11 +3,23 @@ import Canvas from '../components/canvas';
 import ToolPicker from '../components/tool-picker';
 import AppContext from '../lib/app-context';
 import axios from 'axios';
+import Timer from '../components/timer';
+import Redirect from '../components/redirect';
 
 export default class Create extends React.Component {
   constructor() {
     super();
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.state = { redirectTo: null };
+  }
+
+  async componentDidMount() {
+    try {
+      const response = await axios.get(`/api/doodle/today/${this.context.userId}`);
+      this.setState({ redirectTo: `#edit?doodleId=${response.data.doodleId}` });
+    } catch (error) {
+      console.error(error, '');
+    }
   }
 
   async handleSubmit(event) {
@@ -16,18 +28,28 @@ export default class Create extends React.Component {
     const title = event.target.title.value;
     const { dataUrl } = this.context;
     try {
-      await axios.post('/api/doodle', { caption, title, dataUrl }, {
+      const response = await axios.post('/api/doodle', { caption, title, dataUrl }, {
         headers: {
           'Content-Type': 'application/json'
         }
       });
+      this.setState({ redirectTo: `#edit?doodleId=${response.data.doodleId}` });// change to redirect to view page later
     } catch (error) {
       console.error(error);
     }
   }
 
   render() {
+    if (this.state.redirectTo) {
+      return <Redirect to={this.state.redirectTo}/>;
+    }
     return (
+      <>
+      <div className="row">
+        <div className="col-full timer-div">
+          <Timer />
+        </div>
+      </div>
       <div className="row create">
         <div className="col-70 canvas-and-tools">
           <Canvas />
@@ -41,6 +63,7 @@ export default class Create extends React.Component {
             </div>
         </form>
       </div>
+      </>
     );
   }
 }

@@ -141,6 +141,11 @@ canvas {
   align-items: center;
 }
 
+.timer-div {
+  display: flex;
+  justify-content: center;
+}
+
 @media screen and (min-width: 640px) {
   .container {
     max-width: 730px;

@@ -3,6 +3,7 @@ import Canvas from '../components/canvas';
 import ToolPicker from '../components/tool-picker';
 import AppContext from '../lib/app-context';
 import axios from 'axios';
+import Timer from '../components/timer';
 
 export default class Edit extends React.Component {
   constructor(props) {
@@ -64,6 +65,12 @@ export default class Edit extends React.Component {
       return <div>loading...</div>;
     }
     return (
+      <>
+      <div className="row">
+        <div className="col-full timer-div">
+          <Timer />
+        </div>
+      </div>
       <div className="row create">
         <div className="col-70 canvas-and-tools">
           <Canvas dataUrl={this.state.dataUrl}/>
@@ -78,6 +85,7 @@ export default class Edit extends React.Component {
             </div>
         </form>
       </div>
+      </>
     );
   }
 }
