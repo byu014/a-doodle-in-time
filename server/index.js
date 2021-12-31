@@ -48,6 +48,25 @@ app.post('/api/doodle', (req, res, next) => {
     });
 });
 
+app.get('/api/doodle/today/:userId', (req, res, next) => {
+  let { userId } = req.params;
+  userId = Number.parseInt(userId);
+  if (!Number.isInteger(userId)) {
+    throw new ClientError(400, 'userId must be an integer');
+  }
+  const sql = 'select * from "doodles" where "createdAt"::date >= NOW()::date and "userId" = $1;';
+  const params = [userId];
+
+  db.query(sql, params)
+    .then(result => {
+      if (!result.rows.length) {
+        throw new ClientError(404, `cannot find from today with user ${userId}`);
+      }
+      res.json(result.rows[0]);
+    })
+    .catch(error => next(error));
+});
+
 app.get('/api/doodle/:doodleId', (req, res, next) => {
   let { doodleId } = req.params;
   doodleId = Number.parseInt(doodleId);

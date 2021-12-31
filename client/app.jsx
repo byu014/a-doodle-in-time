@@ -50,7 +50,8 @@ export default class App extends React.Component {
       opacity: 1,
       size: 10,
       undoStack: [],
-      redoStack: []
+      redoStack: [],
+      userId: 1 // hardcoded,change when update with auth
     };
     return (
       <AppContext.Provider value={contextValue}>
