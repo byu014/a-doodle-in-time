@@ -45,7 +45,8 @@ export default class View extends React.Component {
             <img className='mini-pfp' src={this.state.data.pfpUrl} alt="" />
             <p>{this.state.data.username}</p>
           </a>
-          <p>{this.state.data.caption}</p>
+          <p className="doodle-title">{this.state.data.title}</p>
+          <p className="doodle-caption">{this.state.data.caption}</p>
           <div className='date-favorite-div'>
             <p className='doodle-timestamp'>{this.dateConvert()}</p>
             <button><i className="far fa-heart unliked"></i></button>

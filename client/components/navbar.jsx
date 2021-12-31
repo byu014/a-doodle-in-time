@@ -10,7 +10,7 @@ export default class Navbar extends React.Component {
   }
 
   handleClick(event) {
-    if (event.target.matches('.sandwich')) {
+    if (event.target.matches('#sandwich-btn')) {
       this.setState({ openDrawer: true });
     } else {
       this.setState({ openDrawer: false });
@@ -34,7 +34,7 @@ export default class Navbar extends React.Component {
             </div>
             <div className="col-half drawer-sandwich">
               <Drawer openDrawer={this.state.openDrawer}/>
-              <button>
+              <button id="sandwich-btn">
                 <i className="fas fa-bars sandwich"></i>
               </button>
             </div>

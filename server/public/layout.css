@@ -157,6 +157,16 @@ canvas {
   align-items: center;
 }
 
+.doodle-info {
+  padding: 1rem 2.5rem;
+}
+
+.date-pickers {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 @media screen and (min-width: 640px) {
   .container {
     max-width: 730px;
@@ -164,6 +174,10 @@ canvas {
 
   canvas {
     width: 600px;
+  }
+
+  .doodle-info {
+    padding: 1rem 3.5rem;
   }
 }
 
@@ -184,6 +198,10 @@ canvas {
 
   canvas {
     width: 700px;
+  }
+
+  .doodle-info {
+    padding: 1rem 5rem;
   }
 }
 
@@ -252,5 +270,14 @@ canvas {
 
   #size {
     width: 15rem;
+  }
+
+  .doodle-info {
+    padding: 0;
+  }
+
+  .date-pickers {
+    flex-direction: row;
+    justify-content: space-evenly;
   }
 }
