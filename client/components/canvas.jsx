@@ -137,6 +137,16 @@ export default class Canvas extends React.Component {
   }
 
   render() {
+    if (!this.props.editable) {
+      return (
+        <canvas
+          ref={this.canvasRef}
+          width='1920'
+          height='1440'
+          id="canvas">
+        </canvas>
+      );
+    }
     return (
       <canvas
         onMouseUp={this.handleMouseUp}

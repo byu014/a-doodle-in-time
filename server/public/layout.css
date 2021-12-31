@@ -146,6 +146,17 @@ canvas {
   justify-content: center;
 }
 
+.user-link {
+  display: flex;
+  align-items: center;
+}
+
+.date-favorite-div {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 @media screen and (min-width: 640px) {
   .container {
     max-width: 730px;

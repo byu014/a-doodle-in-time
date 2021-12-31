@@ -73,7 +73,9 @@ app.get('/api/doodle/:doodleId', (req, res, next) => {
   if (!Number.isInteger(doodleId)) {
     throw new ClientError(400, 'doodleId must be an integer');
   }
-  const sql = 'select * from "doodles" where "doodleId" = $1;';
+  const sql = `select * from "doodles"
+    join "users" using ("userId")
+    where "doodleId" = $1;`;
   const params = [doodleId];
 
   db.query(sql, params)
