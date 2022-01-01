@@ -205,6 +205,29 @@ canvas {
   }
 }
 
+.month-picker,
+.year-picker,
+.date-picker {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.gallery {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.drawing-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.gallery-row {
+  justify-content: center;
+}
+
 @media screen and (min-width: 1024px) {
   .container {
     min-width: 1300px;
@@ -279,5 +302,10 @@ canvas {
   .date-pickers {
     flex-direction: row;
     justify-content: space-evenly;
+  }
+
+  .gallery {
+    justify-content: flex-start;
+    max-width: 1474px;
   }
 }

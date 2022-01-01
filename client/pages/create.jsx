@@ -33,7 +33,7 @@ export default class Create extends React.Component {
           'Content-Type': 'application/json'
         }
       });
-      this.setState({ redirectTo: `#edit?doodleId=${response.data.doodleId}` });// change to redirect to view page later
+      this.setState({ redirectTo: `#view?doodleId=${response.data.doodleId}` });// change to redirect to view page later
     } catch (error) {
       console.error(error);
     }

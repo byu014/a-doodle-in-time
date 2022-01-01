@@ -14,9 +14,9 @@ export default class Timer extends React.Component {
 
   tick() {
     const date = new Date();
-    const hoursLeft = 24 - date.getUTCHours();
-    const minutesLeft = 60 - date.getUTCMinutes();
-    const secondsLeft = 60 - date.getUTCSeconds();
+    const hoursLeft = 23 - date.getUTCHours();
+    const minutesLeft = 59 - date.getUTCMinutes();
+    const secondsLeft = 59 - date.getUTCSeconds();
 
     this.setState({
       timer: `${hoursLeft < 10 ? '0' + hoursLeft.toString() : hoursLeft}:

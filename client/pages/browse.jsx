@@ -1,26 +1,32 @@
 import React from 'react';
 import AppContext from '../lib/app-context';
+import DrawingCard from '../components/drawing-card';
+import axios from 'axios';
+import Redirect from '../components/redirect';
 
 export default class Browse extends React.Component {
   constructor(props) {
     super(props);
     this.date = new Date();
+
     this.state = {
-      month: null,
-      day: null,
-      year: null
+      month: this.date.getUTCMonth(),
+      date: this.date.getUTCDate(),
+      year: this.date.getUTCFullYear(),
+      galleryCards: null,
+      changed: false,
+      redirectTo: null
     };
 
-    this.incrase = this.increase.bind(this);
+    this.increase = this.increase.bind(this);
+    this.decrease = this.decrease.bind(this);
     this.handleClickDatePickers = this.handleClickDatePickers.bind(this);
+    this.renderGallery = this.renderGallery.bind(this);
+    this.handleClickCard = this.handleClickCard.bind(this);
   }
 
   componentDidMount() {
-    this.setState({
-      month: this.date.getUTCMonth(),
-      date: this.date.getUTCDate(),
-      year: this.date.getUTCFullYear()
-    });
+    this.renderGallery();
   }
 
   maxDaysPerMonth(month, year) {
@@ -39,6 +45,7 @@ export default class Browse extends React.Component {
     } else if (event.target.matches('.left-btn')) {
       this.decrease(event.target.getAttribute('for'));
     }
+    this.setState({ changed: true });
   }
 
   increase(target) {
@@ -79,7 +86,43 @@ export default class Browse extends React.Component {
     }
   }
 
+  async renderGallery() {
+    try {
+      const fullDate = `${this.state.year}-${((this.state.month) % 12 + 1)}-${this.state.date}`;
+      const response = await axios.get(`/api/doodles/${fullDate}`);
+      const galleryCards = response.data.map(doodle => {
+        return (
+          <li key={doodle.doodleId} className="li-card">
+            <a onClick={this.handleClickCard} doodleId={doodle.doodleId}>
+              <DrawingCard
+                dataUrl={doodle.dataUrl}
+                title={doodle.title}
+                username={doodle.username}
+                pfpUrl={doodle.pfpUrl}
+              />
+            </a>
+          </li>
+        );
+      });
+      this.setState({ galleryCards, changed: false });
+    } catch (err) {
+      console.error(err);
+      return <div></div>;
+    }
+  }
+
+  handleClickCard(event) {
+    const doodleId = event.currentTarget.getAttribute('doodleId');
+    this.setState({ redirectTo: `#view?doodleId=${doodleId}` });
+  }
+
   render() {
+    if (this.state.changed) {
+      this.renderGallery();
+    }
+    if (this.state.redirectTo) {
+      return <Redirect to={this.state.redirectTo}/>;
+    }
     return (
       <>
         <div className="row" onClick={this.handleClickDatePickers}>
@@ -88,7 +131,9 @@ export default class Browse extends React.Component {
               <button className='left-btn' htmlFor='month'>
                 <i className="fas fa-chevron-left"></i>
               </button>
-              {this.context.monthNames[this.state.month]}
+              <p>
+                {this.context.monthNames[this.state.month]}
+              </p>
               <button className='right-btn' htmlFor='month' >
                 <i className="fas fa-chevron-right"></i>
               </button>
@@ -97,7 +142,9 @@ export default class Browse extends React.Component {
               <button className='left-btn' htmlFor='date'>
                 <i className="fas fa-chevron-left"></i>
               </button>
-              {this.state.date}
+              <p>
+                {this.state.date}
+              </p>
               <button className='right-btn' htmlFor='date' >
                 <i className="fas fa-chevron-right"></i>
               </button>
@@ -106,15 +153,19 @@ export default class Browse extends React.Component {
               <button className='left-btn' htmlFor='year'>
                 <i className="fas fa-chevron-left"></i>
               </button>
-              {this.state.year}
+              <p>
+                {this.state.year}
+              </p>
               <button className='right-btn' htmlFor='year' >
                 <i className="fas fa-chevron-right"></i>
               </button>
             </div>
           </div>
         </div>
-        <div className="row gallery">
-
+        <div className="row gallery-row">
+            <ul className="col-full gallery">
+              {this.state.galleryCards}
+            </ul>
         </div>
       </>
     );

@@ -305,3 +305,58 @@ button i {
 .doodle-caption {
   color: #c4c4c4;
 }
+
+.month-picker > p,
+.year-picker > p,
+.date-picker > p {
+  width: 10rem;
+  text-align: center;
+}
+
+.date-pickers {
+  font-size: 3rem;
+}
+
+.card-img {
+  background-color: white;
+  width: 20rem;
+  height: 20rem;
+  box-shadow: 0 4px 40px 20px rgba(0, 0, 0, 0.5);
+  border-radius: 1rem;
+}
+
+.drawing-card > * {
+  margin-bottom: 0.5rem;
+}
+
+.card-username {
+  font-size: 1rem;
+}
+
+.gallery > * {
+  padding: 3rem 5rem;
+}
+
+.user-link-small > * {
+  margin-right: 0.5rem;
+}
+
+.user-link-small > img {
+  width: 2rem;
+  height: 2rem;
+}
+
+li {
+  list-style-type: none;
+}
+
+.drawing-card {
+  position: relative;
+}
+
+.card-heart {
+  position: absolute;
+  top: 18rem;
+  color: black;
+  right: 1rem;
+}
