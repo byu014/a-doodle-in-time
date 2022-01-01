@@ -121,7 +121,7 @@ export default class Canvas extends React.Component {
         return;
       }
       if (lineStyle === 3) { // spiky
-        this.ctx.moveTo(x + (x - this.state.lastX) * (0.5 * distance), y + (y - this.state.lastY) * (0.5 * distance));
+        this.ctx.moveTo(x + (x - this.state.lastX) * (this.context.size / 10 * distance), y + (y - this.state.lastY) * (this.context.size / 10 * distance));
       }
       if (lineStyle === 4) { // center
         const midX = this.state.mid.x;
