@@ -18,7 +18,7 @@ export default class Create extends React.Component {
       const response = await axios.get(`/api/doodle/today/${this.context.userId}`);
       this.setState({ redirectTo: `#edit?doodleId=${response.data.doodleId}` });
     } catch (error) {
-      console.error(error, '');
+      console.error(error);
     }
   }
 
@@ -33,7 +33,7 @@ export default class Create extends React.Component {
           'Content-Type': 'application/json'
         }
       });
-      this.setState({ redirectTo: `#edit?doodleId=${response.data.doodleId}` });// change to redirect to view page later
+      this.setState({ redirectTo: `#view?doodleId=${response.data.doodleId}` });// change to redirect to view page later
     } catch (error) {
       console.error(error);
     }
@@ -52,7 +52,7 @@ export default class Create extends React.Component {
       </div>
       <div className="row create">
         <div className="col-70 canvas-and-tools">
-          <Canvas />
+          <Canvas editable={true} />
           <ToolPicker />
         </div>
         <form className="col-30 submission-form" onSubmit={this.handleSubmit}>

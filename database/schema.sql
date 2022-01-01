@@ -11,8 +11,8 @@ CREATE TABLE "users" (
 	"email" TEXT,
 	"location" TEXT,
 	"bio" TEXT,
-	"pfpUrl" TEXT,
-	"createdAt" timestamptz NOT NULL DEFAULT now(),
+	"pfpUrl" TEXT DEFAULT 'https://res.cloudinary.com/dowvcrx9e/image/upload/v1640925526/DrawingApp/default.png',
+	"joined" timestamptz NOT NULL DEFAULT now(),
 	CONSTRAINT "users_pk" PRIMARY KEY ("userId")
 ) WITH (
   OIDS=FALSE
@@ -31,7 +31,7 @@ CREATE TABLE "doodles" (
 CREATE TABLE "favorites" (
 	"userId" integer NOT NULL,
 	"doodleId" integer NOT NULL,
-	"createdAt" timestamptz NOT NULL DEFAULT now(),
+	"favoritedAt" timestamptz NOT NULL DEFAULT now(),
 	CONSTRAINT "favorites_pk" PRIMARY KEY ("userId","doodleId")
 ) WITH (
   OIDS=FALSE
@@ -39,7 +39,7 @@ CREATE TABLE "favorites" (
 CREATE TABLE "likes" (
 	"userId" integer NOT NULL,
 	"doodleId" integer NOT NULL,
-	"createdAt" timestamptz NOT NULL DEFAULT now(),
+	"likedAt" timestamptz NOT NULL DEFAULT now(),
 	CONSTRAINT "likes_pk" PRIMARY KEY ("userId","doodleId")
 ) WITH (
   OIDS=FALSE

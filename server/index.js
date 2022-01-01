@@ -33,7 +33,7 @@ app.post('/api/doodle', (req, res, next) => {
   }
   if (!title || !title.length) {
     const date = new Date();
-    title = `${monthNames[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
+    title = `${monthNames[date.getUTCMonth()]} ${date.getUTCDate()}, ${date.getUTCFullYear()}`;
   }
   const sql = `insert into "doodles" ("title", "caption", "dataUrl", "userId")
   values ($1, $2, $3, $4)
@@ -73,7 +73,9 @@ app.get('/api/doodle/:doodleId', (req, res, next) => {
   if (!Number.isInteger(doodleId)) {
     throw new ClientError(400, 'doodleId must be an integer');
   }
-  const sql = 'select * from "doodles" where "doodleId" = $1;';
+  const sql = `select * from "doodles"
+    join "users" using ("userId")
+    where "doodleId" = $1;`;
   const params = [doodleId];
 
   db.query(sql, params)
@@ -138,6 +140,28 @@ app.delete('/api/doodle/:doodleId', (req, res, next) => {
         throw new ClientError(404, `cannot find doodle with doodleId ${doodleId}`);
       }
       res.json(result.rows[0]);
+    })
+    .catch(error => next(error));
+});
+
+app.get('/api/doodles/:fullDate', (req, res, next) => {
+  const fullDate = req.params.fullDate.split('-');
+  if (fullDate.length !== 3) {
+    throw new ClientError(400, 'Date must be in ISO-8601 format (YYYY-MM-DD)');
+  }
+  const [year, month, date] = fullDate.map(val => Number.parseInt(val));
+  if (!Number.isInteger(year) || !Number.isInteger(month) || !Number.isInteger(date)) {
+    throw new ClientError('Year, Month, and Date values must be integers');
+  }
+
+  const sql = `select * from "doodles"
+    join "users" using ("userId")
+    where "createdAt"::date = $1
+    order by "createdAt" desc;`;
+  const params = [req.params.fullDate];
+  db.query(sql, params)
+    .then(result => {
+      res.json(result.rows);
     })
     .catch(error => next(error));
 });

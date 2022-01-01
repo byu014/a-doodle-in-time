@@ -11,13 +11,13 @@ button {
   border-radius: 0.3rem;
   padding: 1rem 2.25rem;
   font: inherit;
+  color: inherit;
 }
 
 canvas {
   aspect-ratio: 4/3;
   background: #fff;
   height: auto;
-  margin: 1rem 0;
   box-shadow: 0 4px 30px 20px rgba(0, 0, 0, 0.1);
   user-select: none;
   touch-action: none;
@@ -155,6 +155,14 @@ input::placeholder {
   background: rgba(255, 255, 255, 0.1);
 }
 
+.submit-caption-uneditable:focus {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.submit-title-uneditable:focus {
+  border-bottom: 2px solid rgba(255, 255, 255, 0.12);
+}
+
 .button-flex {
   width: 100%;
   height: 100%;
@@ -249,7 +257,6 @@ input[type="color"]:hover {
   align-items: center;
   width: 10rem;
   border-radius: 3rem;
-  color: inherit;
 }
 
 .dash-toggle:hover {
@@ -264,6 +271,92 @@ input[type="color"]:hover {
   background: rgba(255, 255, 255, 0.1);
 }
 
-.art-tool-btn i {
+button i {
   pointer-events: none;
+}
+
+.mini-pfp {
+  width: 5rem;
+  height: 5rem;
+  border-radius: 5rem;
+}
+
+.user-link > * {
+  margin: 0 1rem 0 0;
+}
+
+.doodle-info > * {
+  margin: 0 0 5rem;
+}
+
+.doodle-timestamp {
+  color: #9c9c9c;
+  font-size: 0.7rem;
+}
+
+.unliked {
+  color: white;
+}
+
+.doodle-title {
+  font-size: 3rem;
+}
+
+.doodle-caption {
+  color: #c4c4c4;
+}
+
+.month-picker > p,
+.year-picker > p,
+.date-picker > p {
+  width: 10rem;
+  text-align: center;
+}
+
+.date-pickers {
+  font-size: 3rem;
+}
+
+.card-img {
+  background-color: white;
+  width: 20rem;
+  height: 20rem;
+  box-shadow: 0 4px 40px 20px rgba(0, 0, 0, 0.5);
+  border-radius: 1rem;
+}
+
+.drawing-card > * {
+  margin-bottom: 0.5rem;
+}
+
+.card-username {
+  font-size: 1rem;
+}
+
+.gallery > * {
+  padding: 3rem 5rem;
+}
+
+.user-link-small > * {
+  margin-right: 0.5rem;
+}
+
+.user-link-small > img {
+  width: 2rem;
+  height: 2rem;
+}
+
+li {
+  list-style-type: none;
+}
+
+.drawing-card {
+  position: relative;
+}
+
+.card-heart {
+  position: absolute;
+  top: 18rem;
+  color: black;
+  right: 1rem;
 }

@@ -10,7 +10,7 @@ export default class Edit extends React.Component {
   constructor(props) {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.state = { dataUrl: null, caption: null, title: null, isError: false, editable: true, deleteable: true };
+    this.state = { dataUrl: null, caption: null, title: null, isError: false, editable: false, deletable: true };
   }
 
   async componentDidMount() {
@@ -29,7 +29,7 @@ export default class Edit extends React.Component {
             caption: response.data.caption,
             title: response.data.title,
             editable: true,
-            deleteable: true
+            deletable: true
           });
         } else {
           this.setState({
@@ -37,11 +37,11 @@ export default class Edit extends React.Component {
             caption: response.data.caption,
             title: response.data.title,
             editable: false,
-            deleteable: true
+            deletable: true
           });
         }
       } else {
-        this.setState({ deleteable: false });
+        this.setState({ deletable: false });
       }
     } catch (error) {
       this.setState({ isError: true });
@@ -56,12 +56,8 @@ export default class Edit extends React.Component {
     const { dataUrl } = this.context;
     if (event.nativeEvent.submitter.matches('[name="delete"]')) {
       try {
-        const response = await axios.delete(`/api/doodle/${this.props.doodleId}`);
-        this.setState({
-          dataUrl: response.data.dataUrl,
-          caption: response.data.caption,
-          title: response.data.title
-        });
+        await axios.delete(`/api/doodle/${this.props.doodleId}`);
+        this.setState({ deletable: false });
       } catch (error) {
         console.error(error);
       }
@@ -81,10 +77,7 @@ export default class Edit extends React.Component {
 
   // TODO assign disabled dynamically to inputs later
   render() {
-    if (this.state.isError) {
-      return <div>Doodle does not exist or was deleted</div>;
-    }
-    if (!this.state.deleteable) {
+    if (this.state.isError || !this.state.deletable) {
       return <Redirect to=''/>;
     }
     if (!this.state.dataUrl) {
@@ -99,14 +92,31 @@ export default class Edit extends React.Component {
       </div>
       <div className="row create">
         <div className="col-70 canvas-and-tools">
-          <Canvas dataUrl={this.state.dataUrl}/>
+          <Canvas editable={this.state.editable} dataUrl={this.state.dataUrl}/>
           {this.state.editable ? <ToolPicker /> : ''}
         </div>
         <form className="col-30 submission-form" onSubmit={this.handleSubmit}>
-            <input className="submit-title large-font" type="text" name="title" id="title" placeholder="Add a title!" defaultValue={this.state.title}/>
-            <textarea rows='10' className="submit-caption" type="text" name="caption" id="caption" placeholder="Write a caption!" autoComplete='off' defaultValue={this.state.caption}/>
+            <input
+              className={`submit-title large-font ${this.state.editable ? '' : 'submit-title-uneditable'}`}
+              type="text"
+              name="title"
+              id="title"
+              placeholder="Add a title!"
+              defaultValue={this.state.title}
+              readOnly={!this.state.editable}
+            />
+            <textarea
+              rows='10'
+              className={`submit-caption ${this.state.editable ? '' : 'submit-caption-uneditable'}`}
+              type="text" name="caption"
+              id="caption"
+              placeholder="Write a caption!"
+              autoComplete='off'
+              defaultValue={this.state.caption}
+              readOnly={!this.state.editable}
+            />
             <div className="button-flex-edit">
-              <button className={`submit-button red-outline-btn ${this.state.deleteable ? '' : 'hidden'}`} type="submit" name="delete">Delete</button>
+              <button className={`submit-button red-outline-btn ${this.state.deletable ? '' : 'hidden'}`} type="submit" name="delete">Delete</button>
               <button className={`submit-button blue-btn ${this.state.editable ? '' : 'hidden'}`} type="submit" name='update'>Update</button>
             </div>
         </form>

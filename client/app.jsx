@@ -4,6 +4,7 @@ import NotFound from './pages/not-found';
 import Create from './pages/create';
 import Browse from './pages/browse';
 import Edit from './pages/edit';
+import View from './pages/view';
 import AppContext from './lib/app-context';
 import { parseRoute } from './lib';
 import { Navbar } from './components';
@@ -38,6 +39,8 @@ export default class App extends React.Component {
         return <Browse />;
       case 'edit':
         return <Edit doodleId={route.params.get('doodleId')}/>;
+      case 'view':
+        return <View doodleId={route.params.get('doodleId')}/>;
       default:
         return <NotFound/>;
     }
@@ -51,6 +54,8 @@ export default class App extends React.Component {
       size: 10,
       undoStack: [],
       redoStack: [],
+      monthNames: ['January', 'February', 'March', 'April', 'May', 'June',
+        'July', 'August', 'September', 'October', 'November', 'December'],
       userId: 1 // hardcoded,change when update with auth
     };
     return (
