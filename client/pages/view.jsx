@@ -49,7 +49,7 @@ export default class View extends React.Component {
           <p className="doodle-caption">{this.state.data.caption}</p>
           <div className='date-favorite-div'>
             <p className='doodle-timestamp'>{this.dateConvert()}</p>
-            <button><i className="far fa-heart unliked"></i></button>
+            <button className='view-heart-btn'><i className="far fa-heart unliked"></i></button>
           </div>
         </div>
       </div>

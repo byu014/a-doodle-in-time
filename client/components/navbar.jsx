@@ -23,13 +23,13 @@ export default class Navbar extends React.Component {
         <nav className="container">
           <div className="row">
             <div className="col-half logo">
-              <a href="#">
+              <a className='nav-link' href="#">
                 <p className="text-shadow logo-name">A Doodle in Time</p>
               </a>
             </div>
             <div className='col-half text-shadow nav-items'>
-              <a href="#create" className="">Create</a>
-              <a href="#browse" className="">Browse</a>
+              <a className='nav-link' href="#create" >Create</a>
+              <a className='nav-link' href="#browse" >Browse</a>
               <button href="" className="white-btn">Sign In</button>
             </div>
             <div className="col-half drawer-sandwich">

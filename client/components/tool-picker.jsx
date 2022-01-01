@@ -14,6 +14,7 @@ export default class ToolPicker extends React.Component {
     this.lineStyles = [
       'line',
       'dotted',
+      'mirror',
       'spiky',
       'center'
     ];
