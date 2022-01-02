@@ -48,6 +48,25 @@ app.post('/api/doodle', (req, res, next) => {
     });
 });
 
+app.get('/api/user/:userId', (req, res, next) => {
+  let { userId } = req.params;
+  userId = Number.parseInt(userId);
+  if (!Number.isInteger(userId)) {
+    throw new ClientError(400, 'userId must be an integer');
+  }
+  const sql = `select * from users
+    where "userId" = $1;`;
+  const params = [userId];
+  db.query(sql, params)
+    .then(result => {
+      if (!result.rows.length) {
+        throw new ClientError(404, `user does not exist with userId ${userId}`);
+      }
+      res.json(result.rows[0]);
+    })
+    .catch(error => next(error));
+});
+
 app.get('/api/doodle/today/:userId', (req, res, next) => {
   let { userId } = req.params;
   userId = Number.parseInt(userId);

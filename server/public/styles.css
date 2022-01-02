@@ -405,3 +405,23 @@ li {
 .nav-link:hover {
   transform: scale(1.05);
 }
+
+.large-pfp {
+  width: 15rem;
+  height: 15rem;
+  border-radius: 20rem;
+}
+
+.artist-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.artist-info > * {
+  margin: 1rem;
+}
+
+.info-location {
+  font-size: 1rem;
+}

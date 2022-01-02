@@ -41,7 +41,7 @@ export default class View extends React.Component {
           <Canvas editable={false} dataUrl={this.state.data.dataUrl}/>
         </div>
         <div className="col-30 doodle-info" >
-          <a className="user-link">
+          <a className="user-link" href={`#profile?userId=${this.state.data.userId}`} >
             <img className='mini-pfp' src={this.state.data.pfpUrl} alt="" />
             <p>{this.state.data.username}</p>
           </a>
