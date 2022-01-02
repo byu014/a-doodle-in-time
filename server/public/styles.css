@@ -46,6 +46,7 @@ button:focus {
   outline: none;
 }
 
+.li-card,
 button:hover,
 a:hover {
   cursor: pointer;
@@ -327,6 +328,13 @@ button i {
   transition: box-shadow 0.3s;
 }
 
+.a-card {
+  padding: 3rem 5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .li-card:hover {
   box-shadow: 0 4px 40px 20px rgba(0, 0, 0, 0.1);
 }
@@ -335,7 +343,7 @@ button i {
   margin-bottom: 0.5rem;
 }
 
-.card-img {
+.card-img-large {
   background-color: white;
   width: 20rem;
   height: 20rem;
@@ -344,13 +352,40 @@ button i {
   margin-bottom: 1rem;
 }
 
+.card-img-small {
+  background-color: white;
+  width: 15rem;
+  height: 15rem;
+  box-shadow: 0 4px 40px 20px rgba(0, 0, 0, 0.5);
+  border-radius: 1rem;
+  margin-bottom: 1rem;
+}
+
+.card-heart-btn-large {
+  position: absolute;
+  top: 18rem;
+  color: black;
+  right: 1rem;
+  padding: 0;
+  margin: 0;
+}
+
+.card-heart-btn-small {
+  position: absolute;
+  top: 13rem;
+  color: black;
+  right: 1rem;
+  padding: 0;
+  margin: 0;
+}
+
 .card-username {
   font-size: 1rem;
 }
 
-.gallery > * {
+/* .gallery > * {
   padding: 3rem 5rem;
-}
+} */
 
 .user-link-small > * {
   margin-right: 0.5rem;
@@ -370,15 +405,6 @@ li {
 }
 
 .view-heart-btn {
-  padding: 0;
-  margin: 0;
-}
-
-.card-heart-btn {
-  position: absolute;
-  top: 18rem;
-  color: black;
-  right: 1rem;
   padding: 0;
   margin: 0;
 }
@@ -410,6 +436,7 @@ li {
   width: 15rem;
   height: 15rem;
   border-radius: 20rem;
+  border: 3px solid white;
 }
 
 .artist-info {
@@ -419,9 +446,29 @@ li {
 }
 
 .artist-info > * {
-  margin: 1rem;
+  margin: 0 5rem 2rem;
 }
 
 .info-location {
   font-size: 1rem;
+}
+
+.tab {
+  font-size: 3rem;
+  border-radius: 0;
+  padding-bottom: 0;
+  color: #707070;
+}
+
+.tab:hover {
+  color: rgba(128, 128, 128, 1);
+}
+
+.active-tab {
+  border-bottom: 5px solid #b1ffe3;
+  color: white;
+}
+
+.active-tab:hover {
+  color: white;
 }

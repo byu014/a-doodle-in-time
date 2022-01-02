@@ -19,8 +19,8 @@ export default class DrawingCard extends React.Component {
   render() {
     return (
       <div className='drawing-card'>
-        <img className='card-img' src={this.props.dataUrl} alt="" />
-        <button className="card-heart-btn"><i className="far fa-heart unliked"></i></button>
+        <img className={`card-img-${this.props.size}`} src={this.props.dataUrl} alt="" />
+        <button className={`card-heart-btn-${this.props.size}`}><i className="far fa-heart unliked"></i></button>
         <p>{this.props.title}</p>
         <div className="user-link user-link-small">
           <img className='mini-pfp' src={this.props.pfpUrl} alt="" />

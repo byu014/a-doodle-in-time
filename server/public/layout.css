@@ -167,6 +167,11 @@ canvas {
   align-items: center;
 }
 
+.tabs {
+  display: flex;
+  justify-content: center;
+}
+
 @media screen and (min-width: 640px) {
   .container {
     max-width: 730px;
@@ -307,5 +312,9 @@ canvas {
   .gallery {
     justify-content: flex-start;
     max-width: 1474px;
+  }
+
+  .tabs {
+    justify-content: flex-start;
   }
 }

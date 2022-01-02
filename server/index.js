@@ -55,6 +55,7 @@ app.get('/api/user/:userId', (req, res, next) => {
     throw new ClientError(400, 'userId must be an integer');
   }
   const sql = `select * from users
+    join "doodles" using ("userId")
     where "userId" = $1;`;
   const params = [userId];
   db.query(sql, params)
@@ -62,7 +63,7 @@ app.get('/api/user/:userId', (req, res, next) => {
       if (!result.rows.length) {
         throw new ClientError(404, `user does not exist with userId ${userId}`);
       }
-      res.json(result.rows[0]);
+      res.json(result.rows);
     })
     .catch(error => next(error));
 });

@@ -2,7 +2,6 @@ import React from 'react';
 import AppContext from '../lib/app-context';
 import DrawingCard from '../components/drawing-card';
 import axios from 'axios';
-import Redirect from '../components/redirect';
 
 export default class Browse extends React.Component {
   constructor(props) {
@@ -14,15 +13,13 @@ export default class Browse extends React.Component {
       date: this.date.getUTCDate(),
       year: this.date.getUTCFullYear(),
       galleryCards: null,
-      changed: false,
-      redirectTo: null
+      changed: false
     };
 
     this.increase = this.increase.bind(this);
     this.decrease = this.decrease.bind(this);
     this.handleClickDatePickers = this.handleClickDatePickers.bind(this);
     this.renderGallery = this.renderGallery.bind(this);
-    this.handleClickCard = this.handleClickCard.bind(this);
   }
 
   componentDidMount() {
@@ -93,12 +90,13 @@ export default class Browse extends React.Component {
       const galleryCards = response.data.map(doodle => {
         return (
           <li key={doodle.doodleId} className="li-card">
-            <a onClick={this.handleClickCard} doodleId={doodle.doodleId}>
+            <a className='a-card' href={`#view?doodleId=${doodle.doodleId}`}>
               <DrawingCard
                 dataUrl={doodle.dataUrl}
                 title={doodle.title}
                 username={doodle.username}
                 pfpUrl={doodle.pfpUrl}
+                size='large'
               />
             </a>
           </li>
@@ -111,17 +109,9 @@ export default class Browse extends React.Component {
     }
   }
 
-  handleClickCard(event) {
-    const doodleId = event.currentTarget.getAttribute('doodleId');
-    this.setState({ redirectTo: `#view?doodleId=${doodleId}` });
-  }
-
   render() {
     if (this.state.changed) {
       this.renderGallery();
-    }
-    if (this.state.redirectTo) {
-      return <Redirect to={this.state.redirectTo}/>;
     }
     return (
       <>
