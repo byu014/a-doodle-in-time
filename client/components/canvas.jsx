@@ -29,12 +29,14 @@ export default class Canvas extends React.Component {
     if (this.props.dataUrl) {
       const img = new Image();
       img.onload = function () {
-        this.ctx.drawImage(img, 0, 0);
+        this.ctx.drawImage(img, 0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
       }.bind(this);
       img.src = this.props.dataUrl;
     }
     this.context.dataUrl = this.props.dataUrl ? this.props.dataUrl : this.canvasRef.current.toDataURL();
-    window.addEventListener('mouseup', this.handleMouseUp);// required since cannot detect mouseup outside of canvas
+    if (this.props.editable) {
+      window.addEventListener('mouseup', this.handleMouseUp);// required since cannot detect mouseup outside of canvas
+    }
   }
 
   handleMouseMove(event) {
