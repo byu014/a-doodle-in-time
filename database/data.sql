@@ -2,7 +2,7 @@ insert into "users" ("username", "hashedPassword","location", "bio", "pfpUrl")
   values ('bill', 'temporary', 'Japan', 'chillest of bill', 'https://upload.wikimedia.org/wikipedia/commons/2/23/US_one_dollar_bill%2C_obverse%2C_series_2009.jpg');
 
 insert into "users" ("username", "hashedPassword", "location", "bio", "pfpUrl")
-  values ('joe', 'temporary', 'United States of America', 'Joe Mama', 'https://static.wikia.nocookie.net/capcomdatabase/images/f/f4/ViewtifulJoe.png/revision/latest?cb=20100708171404');
+  values ('joe', 'temporary', 'United States of America', 'Joe Mama', 'https://i.redd.it/rr36shy7fr961.jpg');
 
 insert into "users" ("username", "hashedPassword", "location", "bio", "pfpUrl")
   values ('jay', 'temporary', 'Canada', 'Blue jays are my favorite bird', 'https://www.allaboutbirds.org/guide/assets/photo/311635911-480px.jpg');
@@ -38,10 +38,19 @@ insert into "doodles" ("createdAt", "title", "caption", "dataUrl", "userId")
   values (now()::date - 1, 'First art', 'doodles by me!', 'https://yt3.ggpht.com/ytc/AKedOLSZFMqBNWHRbePrfgDoUz-DSCsQTnyX_vhlNoRPPA=s900-c-k-c0x00ffffff-no-rj', 6);
 
 insert into "doodles" ("createdAt", "title", "caption", "dataUrl", "userId")
+  values (now()::date - 1, 'penguin', 'kinda just stared at you', 'https://clipartion.com/wp-content/uploads/2015/10/penguin-clip-art-black-and-white-free-clipart-images.png', 7);
+
+insert into "doodles" ("createdAt", "title", "caption", "dataUrl", "userId")
   values (now()::date - 2, 'Owl', 'hoot hoot', 'https://cdn.pixabay.com/photo/2019/12/05/19/28/clip-art-4675943_1280.png', 7);
 
 insert into "doodles" ("createdAt", "title", "caption", "dataUrl", "userId")
   values (now()::date - 2, 'watermelon', 'good lookin melon', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS_nGjWq9cThLzs55LiI5QN996sVJsHTNoYQw&usqp=CAU', 8);
 
 insert into "doodles" ("createdAt", "title", "caption", "dataUrl", "userId")
-  values (now()::date - 2, 'rock', 'spooked', 'https://lh3.googleusercontent.com/proxy/Wve2SjLAOmr2WY82V58Ar_e85ni61ZTbgGXhZ699qMKCVmve2xBMx359GoE1kJ4BN-kXn5uSKdeZ6hMkEUf-aosxoOcLJ0JXcCfqmS-gHYjYB8fPldrmBza3TjpbyZbLS3jZ8I3693WAbwpf7n5IRCjaI72PnOjKgu8O7w', 2);
+  values ('2021-12-31'::date, 'rock', 'spooked', 'https://lh3.googleusercontent.com/proxy/Wve2SjLAOmr2WY82V58Ar_e85ni61ZTbgGXhZ699qMKCVmve2xBMx359GoE1kJ4BN-kXn5uSKdeZ6hMkEUf-aosxoOcLJ0JXcCfqmS-gHYjYB8fPldrmBza3TjpbyZbLS3jZ8I3693WAbwpf7n5IRCjaI72PnOjKgu8O7w', 2);
+
+insert into "doodles" ("createdAt", "title", "caption", "dataUrl", "userId")
+  values ('2021-12-31'::date, 'house', 'small house', 'https://media.istockphoto.com/vectors/home-building-line-icon-editable-stroke-pixel-perfect-for-mobile-and-vector-id1136261351?k=20&m=1136261351&s=612x612&w=0&h=aGBLbFVLgQGt5tFTLM3BKAgOHYBSqijBLd-mpFyMHCU=', 3);
+
+insert into "doodles" ("createdAt", "title", "caption", "dataUrl", "userId")
+  values ('2021-12-31'::date, 'bee', 'hes a very happy bee', 'https://www.buzzaboutbees.net/images/bee.jpg', 4);

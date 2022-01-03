@@ -7,6 +7,7 @@ export default class Browse extends React.Component {
   constructor(props) {
     super(props);
     this.date = new Date();
+    this.earliestYear = 2021;
 
     this.state = {
       month: this.date.getUTCMonth(),
@@ -45,41 +46,67 @@ export default class Browse extends React.Component {
     this.setState({ changed: true });
   }
 
+  // recursively increases corresponding values as well when selected target value loops to beginning/end
   increase(target) {
     if (target === 'month') {
-      const maxDays = this.maxDaysPerMonth((this.state.month + 1) % 12, this.state.year);
-      this.setState({
-        month: (this.state.month + 1) % 12,
-        date: Math.min(maxDays, this.state.date)
-      });
-    } else if (target === 'date') {
-      const maxDays = this.maxDaysPerMonth((this.state.month) % 12, this.state.year);
-      this.setState({
-        date: ((this.state.date) % maxDays) + 1
-      });
-    } else if (target === 'year') {
-      this.setState({
-        year: this.state.year + 1 > this.date.getUTCFullYear() ? 2021 : this.state.year + 1
-      });
-    }
-  }
-
-  decrease(target) {
-    if (target === 'month') {
-      const newMonth = (this.state.month - 1 < 0 ? 11 : this.state.month - 1) % 12;
+      const newMonth = (this.state.month + 1) % 12;
       const maxDays = this.maxDaysPerMonth(newMonth, this.state.year);
+      if (newMonth === 0) {
+        if (this.state.year === this.date.getUTCFullYear()) return;
+        this.increase('year');
+      }
       this.setState({
         month: newMonth,
         date: Math.min(maxDays, this.state.date)
       });
     } else if (target === 'date') {
       const maxDays = this.maxDaysPerMonth((this.state.month) % 12, this.state.year);
-      const newDate = this.state.date - 1 < 1 ? maxDays : this.state.date - 1;
+      const newDate = ((this.state.date) % maxDays) + 1;
+      if (this.state.date === maxDays) {
+        if (this.state.month === 11 && this.state.year === this.date.getUTCFullYear()) return;
+        this.increase('month');
+      }
       this.setState({
         date: newDate
       });
     } else if (target === 'year') {
-      this.setState({ year: this.state.year - 1 < 2021 ? this.date.getUTCFullYear() : this.state.year - 1 });
+      const newYear = this.state.year + 1 > this.date.getUTCFullYear() ? this.date.getUTCFullYear() : this.state.year + 1;
+      const maxDays = this.maxDaysPerMonth(this.state.month, newYear);
+      this.setState({
+        year: newYear,
+        date: Math.min(maxDays, this.state.date)
+      });
+    }
+  }
+
+  decrease(target) {
+    const { earliestYear } = this;
+    if (target === 'month') {
+      const newMonth = (this.state.month - 1 < 0 ? 11 : this.state.month - 1) % 12;
+      const maxDays = this.maxDaysPerMonth(newMonth, this.state.year);
+      if (newMonth === 11) {
+        if (this.state.year === earliestYear) return;
+        this.decrease('year');
+      }
+      this.setState({
+        month: newMonth,
+        date: Math.min(maxDays, this.state.date)
+      });
+    } else if (target === 'date') {
+      const newMonth = (this.state.month - 1 < 0 ? 11 : this.state.month - 1) % 12;
+      const maxDays = this.maxDaysPerMonth(newMonth, this.state.year);
+      const newDate = this.state.date - 1 < 1 ? maxDays : this.state.date - 1;
+      if (this.state.date === 1) {
+        if (this.state.month === 0 && this.state.year === earliestYear) return;
+        this.decrease('month');
+      }
+      this.setState({
+        date: newDate
+      });
+    } else if (target === 'year') {
+      const newYear = this.state.year - 1 < earliestYear ? earliestYear : this.state.year - 1;
+      const maxDays = this.maxDaysPerMonth(this.state.month, newYear);
+      this.setState({ year: newYear, date: Math.min(maxDays, this.state.date) });
     }
   }
 
@@ -96,6 +123,7 @@ export default class Browse extends React.Component {
                 title={doodle.title}
                 username={doodle.username}
                 pfpUrl={doodle.pfpUrl}
+                userId={doodle.userId}
                 size='large'
               />
             </a>

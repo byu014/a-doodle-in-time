@@ -4,7 +4,6 @@ body {
   background-attachment: fixed;
   color: white;
   font-family: "Bubblegum Sans", sans-serif;
-  font-size: 1.4rem;
 }
 
 button {
@@ -382,10 +381,6 @@ button i {
 .card-username {
   font-size: 1rem;
 }
-
-/* .gallery > * {
-  padding: 3rem 5rem;
-} */
 
 .user-link-small > * {
   margin-right: 0.5rem;

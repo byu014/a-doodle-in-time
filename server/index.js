@@ -56,7 +56,8 @@ app.get('/api/user/:userId', (req, res, next) => {
   }
   const sql = `select * from users
     join "doodles" using ("userId")
-    where "userId" = $1;`;
+    where "userId" = $1
+    order by "createdAt" desc;`;
   const params = [userId];
   db.query(sql, params)
     .then(result => {

@@ -1,3 +1,7 @@
+body {
+  font-size: 1rem;
+}
+
 .hidden {
   display: none;
 }
@@ -187,6 +191,10 @@ canvas {
 }
 
 @media screen and (min-width: 768px) {
+  body {
+    font-size: 1.1rem;
+  }
+
   .container {
     max-width: 900px;
   }
@@ -234,6 +242,10 @@ canvas {
 }
 
 @media screen and (min-width: 1024px) {
+  body {
+    font-size: 1.4rem;
+  }
+
   .container {
     min-width: 1300px;
     max-width: 1920px;

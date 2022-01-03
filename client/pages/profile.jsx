@@ -32,6 +32,7 @@ export default class Profile extends React.Component {
                 title={doodle.title}
                 username={doodle.username}
                 pfpUrl={doodle.pfpUrl}
+                userId={doodle.userId}
                 size='small'
               />
             </a>
