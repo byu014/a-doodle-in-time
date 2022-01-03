@@ -1,5 +1,6 @@
 import React from 'react';
 import Drawer from './drawer';
+import AppContext from '../lib/app-context';
 
 export default class Navbar extends React.Component {
   constructor(props) {
@@ -44,3 +45,5 @@ export default class Navbar extends React.Component {
     );
   }
 }
+
+Navbar.contextType = AppContext;
