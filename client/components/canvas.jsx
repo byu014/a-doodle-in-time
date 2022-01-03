@@ -8,7 +8,8 @@ export default class Canvas extends React.Component {
       isDrawing: false,
       isMouseDown: false,
       lastX: null,
-      lastY: null
+      lastY: null,
+      mid: null
     };
     this.canvasRef = React.createRef();
     this.ctx = null;
@@ -28,12 +29,14 @@ export default class Canvas extends React.Component {
     if (this.props.dataUrl) {
       const img = new Image();
       img.onload = function () {
-        this.ctx.drawImage(img, 0, 0);
+        this.ctx.drawImage(img, 0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
       }.bind(this);
       img.src = this.props.dataUrl;
     }
     this.context.dataUrl = this.props.dataUrl ? this.props.dataUrl : this.canvasRef.current.toDataURL();
-    window.addEventListener('mouseup', this.handleMouseUp);// required since cannot detect mouseup outside of canvas
+    if (this.props.editable) {
+      window.addEventListener('mouseup', this.handleMouseUp);// required since cannot detect mouseup outside of canvas
+    }
   }
 
   handleMouseMove(event) {
@@ -65,7 +68,7 @@ export default class Canvas extends React.Component {
     if (event.type !== 'mousedown') {
       return;
     }
-    this.setState({ isDrawing: true, isMouseDown: true });
+    this.setState({ isDrawing: true, isMouseDown: true, mid: this.getMousePos(this.canvasRef.current, event) });
     this.draw(event);// allows users to draw dots or else requires dragging motion to draw
   }
 
@@ -74,7 +77,7 @@ export default class Canvas extends React.Component {
       this.context.undoStack.push(this.context.dataUrl);
       this.context.redoStack = [];
     }
-    this.setState({ isDrawing: false, lastX: null, lastY: null, isMouseDown: false });
+    this.setState({ isDrawing: false, lastX: null, lastY: null, isMouseDown: false, mid: null });
     if (this.canvasRef.current) {
       this.context.dataUrl = this.canvasRef.current.toDataURL();
     }
@@ -87,7 +90,7 @@ export default class Canvas extends React.Component {
   draw(event) {
     this.ctx.beginPath();// prevents jagged path by restarting path with every call to draw
     const { x, y } = this.getMousePos(this.canvasRef.current, event);
-    const { lineStyle } = this.context;
+    const lineStyle = this.context.drawingUtensil === 'pen' ? this.context.lineStyle : 0;
     this.ctx.lineWidth = this.context.size;
     this.ctx.lineCap = 'round';
     this.ctx.globalAlpha = this.context.drawingUtensil === 'pen' ? this.context.opacity : 1;
@@ -95,25 +98,43 @@ export default class Canvas extends React.Component {
 
     if (this.state.lastX && this.state.lastY) { // prevents gaps from drawing too fast
       const distance = this.distance(this.state.lastX, this.state.lastY, x, y);
-      if (lineStyle === 0) {
+      if (lineStyle === 0) { // line
         this.ctx.moveTo(this.state.lastX, this.state.lastY);
       }
-      if (lineStyle === 1) {
+      if (lineStyle === 1) { // dotted
         if (distance < this.context.size && lineStyle === 1) {
           return;
         }
         this.ctx.moveTo(x, y);
       }
-      if (lineStyle === 2) {
-        this.ctx.moveTo(x + (x - this.state.lastX) * (0.5 * distance), y + (y - this.state.lastY) * (0.5 * distance));
+      if (lineStyle === 2) { // horizontal mirror
+        const canvas = this.canvasRef.current;
+        const rect = canvas.getBoundingClientRect();
+        const midX = (rect.right - rect.left) / 2 / (rect.right - rect.left) * canvas.width;
+        const distToMidLastX = Math.abs(midX - this.state.lastX);
+        const distToMidX = Math.abs(midX - x);
+        this.ctx.moveTo(midX > this.state.lastX ? midX + distToMidLastX : midX - distToMidLastX, this.state.lastY);
+        this.ctx.lineTo(midX > x ? midX + distToMidX : midX - distToMidX, y);
+        this.ctx.moveTo(this.state.lastX, this.state.lastY);
       }
-    }
-    if (lineStyle === 3) {
-      const canvas = this.canvasRef.current;
-      const rect = canvas.getBoundingClientRect();
-      const midX = (rect.right - rect.left) / 2 / (rect.right - rect.left) * canvas.width;
-      const midY = (rect.bottom - rect.top) / 2 / (rect.bottom - rect.top) * canvas.height;
-      this.ctx.moveTo(midX, midY);
+      if (lineStyle === 3) { // vertical mirror
+        const canvas = this.canvasRef.current;
+        const rect = canvas.getBoundingClientRect();
+        const midY = (rect.bottom - rect.top) / 2 / (rect.bottom - rect.top) * canvas.height;
+        const distToMidLastY = Math.abs(midY - this.state.lastY);
+        const distToMidY = Math.abs(midY - y);
+        this.ctx.moveTo(this.state.lastX, midY > this.state.lastY ? midY + distToMidLastY : midY - distToMidLastY);
+        this.ctx.lineTo(x, midY > y ? midY + distToMidY : midY - distToMidY);
+        this.ctx.moveTo(this.state.lastX, this.state.lastY);
+      }
+      if (lineStyle === 4) { // spiky
+        this.ctx.moveTo(x + (x - this.state.lastX) * (this.context.size / 10 * distance), y + (y - this.state.lastY) * (this.context.size / 10 * distance));
+      }
+      if (lineStyle === 5) { // center
+        const midX = this.state.mid.x;
+        const midY = this.state.mid.y;
+        this.ctx.moveTo(midX, midY);
+      }
     }
     this.ctx.lineTo(x, y);
     this.ctx.stroke();

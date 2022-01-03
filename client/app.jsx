@@ -5,6 +5,7 @@ import Create from './pages/create';
 import Browse from './pages/browse';
 import Edit from './pages/edit';
 import View from './pages/view';
+import Profile from './pages/profile';
 import AppContext from './lib/app-context';
 import { parseRoute } from './lib';
 import { Navbar } from './components';
@@ -41,6 +42,8 @@ export default class App extends React.Component {
         return <Edit doodleId={route.params.get('doodleId')}/>;
       case 'view':
         return <View doodleId={route.params.get('doodleId')}/>;
+      case 'profile':
+        return <Profile userId={route.params.get('userId')}/>;
       default:
         return <NotFound/>;
     }

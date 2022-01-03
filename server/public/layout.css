@@ -1,3 +1,7 @@
+body {
+  font-size: 1rem;
+}
+
 .hidden {
   display: none;
 }
@@ -167,6 +171,17 @@ canvas {
   align-items: center;
 }
 
+.tabs {
+  display: flex;
+  justify-content: center;
+}
+
+.user-link-edit {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 @media screen and (min-width: 640px) {
   .container {
     max-width: 730px;
@@ -182,6 +197,10 @@ canvas {
 }
 
 @media screen and (min-width: 768px) {
+  body {
+    font-size: 1.1rem;
+  }
+
   .container {
     max-width: 900px;
   }
@@ -229,6 +248,10 @@ canvas {
 }
 
 @media screen and (min-width: 1024px) {
+  body {
+    font-size: 1.4rem;
+  }
+
   .container {
     min-width: 1300px;
     max-width: 1920px;
@@ -307,5 +330,9 @@ canvas {
   .gallery {
     justify-content: flex-start;
     max-width: 1474px;
+  }
+
+  .tabs {
+    justify-content: flex-start;
   }
 }

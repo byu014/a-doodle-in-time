@@ -4,12 +4,13 @@ export default class Timer extends React.Component {
   constructor() {
     super();
     this.state = { timer: null };
+    this.interval = null;
     this.tick = this.tick.bind(this);
   }
 
   componentDidMount() {
     this.tick();
-    setInterval(this.tick, 1000);
+    this.interval = setInterval(this.tick, 1000);
   }
 
   tick() {
@@ -25,9 +26,13 @@ export default class Timer extends React.Component {
     });
   }
 
+  componentWillUnmount() {
+    clearInterval(this.interval);
+  }
+
   render() {
     return (
-      <p>{this.state.timer}</p>
+      <p className='timer'>{this.state.timer}</p>
     );
   }
 }

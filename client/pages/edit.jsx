@@ -10,7 +10,15 @@ export default class Edit extends React.Component {
   constructor(props) {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.state = { dataUrl: null, caption: null, title: null, isError: false, editable: false, deletable: true };
+    this.state = {
+      dataUrl: null,
+      caption: null,
+      title: null,
+      isError: false,
+      editable: false,
+      deletable: true,
+      redirectTo: null
+    };
   }
 
   async componentDidMount() {
@@ -57,7 +65,7 @@ export default class Edit extends React.Component {
     if (event.nativeEvent.submitter.matches('[name="delete"]')) {
       try {
         await axios.delete(`/api/doodle/${this.props.doodleId}`);
-        this.setState({ deletable: false });
+        this.setState({ redirectTo: `#profile?userId=${this.context.userId}` });
       } catch (error) {
         console.error(error);
       }
@@ -68,6 +76,7 @@ export default class Edit extends React.Component {
             'Content-Type': 'application/json'
           }
         });
+        this.setState({ redirectTo: `#view?doodleId=${this.props.doodleId}` });
       } catch (error) {
         this.setState({ isError: true });
         console.error(error);
@@ -77,6 +86,9 @@ export default class Edit extends React.Component {
 
   // TODO assign disabled dynamically to inputs later
   render() {
+    if (this.state.redirectTo) {
+      return <Redirect to={this.state.redirectTo}/>;
+    }
     if (this.state.isError || !this.state.deletable) {
       return <Redirect to=''/>;
     }

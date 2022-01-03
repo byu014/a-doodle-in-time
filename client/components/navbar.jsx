@@ -1,5 +1,6 @@
 import React from 'react';
 import Drawer from './drawer';
+import AppContext from '../lib/app-context';
 
 export default class Navbar extends React.Component {
   constructor(props) {
@@ -23,14 +24,14 @@ export default class Navbar extends React.Component {
         <nav className="container">
           <div className="row">
             <div className="col-half logo">
-              <a href="#">
+              <a className='nav-link' href="#">
                 <p className="text-shadow logo-name">A Doodle in Time</p>
               </a>
             </div>
             <div className='col-half text-shadow nav-items'>
-              <a href="#create" className="">Create</a>
-              <a href="#browse" className="">Browse</a>
-              <button href="" className="white-btn">Sign In</button>
+              <a className='nav-link' href="#create" ><i className="far fa-plus-square"></i> Create</a>
+              <a className='nav-link' href="#browse" ><i className="far fa-images"></i> Browse</a>
+              <button href="" className="white-btn sign-in-btn-navbar">Sign In</button>
             </div>
             <div className="col-half drawer-sandwich">
               <Drawer openDrawer={this.state.openDrawer}/>
@@ -44,3 +45,5 @@ export default class Navbar extends React.Component {
     );
   }
 }
+
+Navbar.contextType = AppContext;

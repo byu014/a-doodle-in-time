@@ -2,27 +2,25 @@ import React from 'react';
 import AppContext from '../lib/app-context';
 import DrawingCard from '../components/drawing-card';
 import axios from 'axios';
-import Redirect from '../components/redirect';
 
 export default class Browse extends React.Component {
   constructor(props) {
     super(props);
     this.date = new Date();
+    this.earliestYear = 2021;
 
     this.state = {
       month: this.date.getUTCMonth(),
       date: this.date.getUTCDate(),
       year: this.date.getUTCFullYear(),
       galleryCards: null,
-      changed: false,
-      redirectTo: null
+      changed: false
     };
 
     this.increase = this.increase.bind(this);
     this.decrease = this.decrease.bind(this);
     this.handleClickDatePickers = this.handleClickDatePickers.bind(this);
     this.renderGallery = this.renderGallery.bind(this);
-    this.handleClickCard = this.handleClickCard.bind(this);
   }
 
   componentDidMount() {
@@ -48,41 +46,71 @@ export default class Browse extends React.Component {
     this.setState({ changed: true });
   }
 
+  // recursively increases corresponding values as well when selected target value loops to beginning/end
+  // caps the date to the current date/month/year when attempting to go beyond current date
   increase(target) {
     if (target === 'month') {
-      const maxDays = this.maxDaysPerMonth((this.state.month + 1) % 12, this.state.year);
+      const newMonth = (this.state.month + 1) % 12;
+      const maxDays = this.maxDaysPerMonth(newMonth, this.state.year);
+      let newYear = this.state.year;
+      if (newMonth === 0) {
+        if (this.state.year === this.date.getUTCFullYear()) return;
+        this.increase('year');
+        newYear = this.state.year + 1 > this.date.getUTCFullYear() ? this.date.getUTCFullYear() : this.state.year + 1;
+      }
       this.setState({
-        month: (this.state.month + 1) % 12,
-        date: Math.min(maxDays, this.state.date)
+        month: newYear === this.date.getUTCFullYear() ? Math.min(newMonth, this.date.getUTCMonth()) : newMonth,
+        date: newYear === this.date.getUTCFullYear() ? Math.min(maxDays, this.state.date, this.date.getUTCDate()) : Math.min(maxDays, this.state.date)
       });
     } else if (target === 'date') {
       const maxDays = this.maxDaysPerMonth((this.state.month) % 12, this.state.year);
+      const newDate = ((this.state.date) % maxDays) + 1;
+      if (this.state.date === maxDays) {
+        if (this.state.month === 11 && this.state.year === this.date.getUTCFullYear()) return;
+        this.increase('month');
+      }
       this.setState({
-        date: ((this.state.date) % maxDays) + 1
+        date: this.state.year === this.date.getUTCFullYear() ? Math.min(newDate, this.date.getUTCDate()) : newDate
       });
     } else if (target === 'year') {
+      const newYear = this.state.year + 1 > this.date.getUTCFullYear() ? this.date.getUTCFullYear() : this.state.year + 1;
+      const maxDays = this.maxDaysPerMonth(this.state.month, newYear);
       this.setState({
-        year: this.state.year + 1 > this.date.getUTCFullYear() ? 2021 : this.state.year + 1
+        year: newYear,
+        date: newYear === this.date.getUTCFullYear() ? Math.min(maxDays, this.state.date, this.date.getUTCDate()) : Math.min(maxDays, this.state.date),
+        month: newYear === this.date.getUTCFullYear() ? Math.min(this.state.month, this.date.getUTCMonth()) : this.state.month
       });
     }
   }
 
   decrease(target) {
+    const { earliestYear } = this;
     if (target === 'month') {
       const newMonth = (this.state.month - 1 < 0 ? 11 : this.state.month - 1) % 12;
       const maxDays = this.maxDaysPerMonth(newMonth, this.state.year);
+      if (newMonth === 11) {
+        if (this.state.year === earliestYear) return;
+        this.decrease('year');
+      }
       this.setState({
         month: newMonth,
         date: Math.min(maxDays, this.state.date)
       });
     } else if (target === 'date') {
-      const maxDays = this.maxDaysPerMonth((this.state.month) % 12, this.state.year);
+      const newMonth = (this.state.month - 1 < 0 ? 11 : this.state.month - 1) % 12;
+      const maxDays = this.maxDaysPerMonth(newMonth, this.state.year);
       const newDate = this.state.date - 1 < 1 ? maxDays : this.state.date - 1;
+      if (this.state.date === 1) {
+        if (this.state.month === 0 && this.state.year === earliestYear) return;
+        this.decrease('month');
+      }
       this.setState({
         date: newDate
       });
     } else if (target === 'year') {
-      this.setState({ year: this.state.year - 1 < 2021 ? this.date.getUTCFullYear() : this.state.year - 1 });
+      const newYear = this.state.year - 1 < earliestYear ? earliestYear : this.state.year - 1;
+      const maxDays = this.maxDaysPerMonth(this.state.month, newYear);
+      this.setState({ year: newYear, date: Math.min(maxDays, this.state.date) });
     }
   }
 
@@ -93,12 +121,15 @@ export default class Browse extends React.Component {
       const galleryCards = response.data.map(doodle => {
         return (
           <li key={doodle.doodleId} className="li-card">
-            <a onClick={this.handleClickCard} doodleId={doodle.doodleId}>
+            <a className='a-card' href={`#view?doodleId=${doodle.doodleId}`}>
               <DrawingCard
                 dataUrl={doodle.dataUrl}
                 title={doodle.title}
                 username={doodle.username}
                 pfpUrl={doodle.pfpUrl}
+                userId={doodle.userId}
+                doodleId={doodle.doodleId}
+                size='large'
               />
             </a>
           </li>
@@ -111,17 +142,9 @@ export default class Browse extends React.Component {
     }
   }
 
-  handleClickCard(event) {
-    const doodleId = event.currentTarget.getAttribute('doodleId');
-    this.setState({ redirectTo: `#view?doodleId=${doodleId}` });
-  }
-
   render() {
     if (this.state.changed) {
       this.renderGallery();
-    }
-    if (this.state.redirectTo) {
-      return <Redirect to={this.state.redirectTo}/>;
     }
     return (
       <>
@@ -131,7 +154,7 @@ export default class Browse extends React.Component {
               <button className='left-btn' htmlFor='month'>
                 <i className="fas fa-chevron-left"></i>
               </button>
-              <p>
+              <p className='date-pickers-text'>
                 {this.context.monthNames[this.state.month]}
               </p>
               <button className='right-btn' htmlFor='month' >
@@ -142,7 +165,7 @@ export default class Browse extends React.Component {
               <button className='left-btn' htmlFor='date'>
                 <i className="fas fa-chevron-left"></i>
               </button>
-              <p>
+              <p className='date-pickers-text'>
                 {this.state.date}
               </p>
               <button className='right-btn' htmlFor='date' >
@@ -153,7 +176,7 @@ export default class Browse extends React.Component {
               <button className='left-btn' htmlFor='year'>
                 <i className="fas fa-chevron-left"></i>
               </button>
-              <p>
+              <p className='date-pickers-text'>
                 {this.state.year}
               </p>
               <button className='right-btn' htmlFor='year' >
