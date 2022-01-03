@@ -22,6 +22,9 @@ insert into "users" ("username", "hashedPassword", "location", "bio", "pfpUrl")
 insert into "users" ("username", "hashedPassword", "location", "bio", "pfpUrl")
   values ('Patrick Star', 'temporary', 'Bikini Bottom', 'the inner machinations of my mind are an enigma', 'https://upload.wikimedia.org/wikipedia/en/thumb/3/33/Patrick_Star.svg/1200px-Patrick_Star.svg.png');
 
+insert into "doodles" ("createdAt","title", "caption", "dataUrl", "userId")
+  values (now()::date - 1,'cloud', 'a very alright looking cloud', 'images/205-2052775_cloud-puffycloud-doodle-clouddoodle-sketch-bnw-transparent-background.jpg', 1);
+
 insert into "doodles" ("title", "caption", "dataUrl", "userId")
   values ('happy face', 'a very very happy face', 'https://m.media-amazon.com/images/I/51zLZbEVSTL._AC_SL1200_.jpg', 2);
 

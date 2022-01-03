@@ -41,10 +41,13 @@ export default class View extends React.Component {
           <Canvas editable={false} dataUrl={this.state.data.dataUrl}/>
         </div>
         <div className="col-30 doodle-info" >
-          <a className="user-link" href={`#profile?userId=${this.state.data.userId}`} >
-            <img className='mini-pfp' src={this.state.data.pfpUrl} alt="" />
-            <p>{this.state.data.username}</p>
-          </a>
+          <div className="user-link-edit">
+            <a className="user-link" href={`#profile?userId=${this.state.data.userId}`} >
+              <img className='mini-pfp' src={this.state.data.pfpUrl} alt="" />
+              <p>{this.state.data.username}</p>
+            </a>
+            <a className={`${this.state.data.userId === this.context.userId ? '' : 'hidden'} card-edit-btn`} href={`#edit?doodleId=${this.props.doodleId}`}>Edit</a>
+          </div>
           <p className="doodle-title">{this.state.data.title}</p>
           <p className="doodle-caption">{this.state.data.caption}</p>
           <div className='date-favorite-div'>

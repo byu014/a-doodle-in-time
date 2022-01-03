@@ -128,6 +128,7 @@ export default class Browse extends React.Component {
                 username={doodle.username}
                 pfpUrl={doodle.pfpUrl}
                 userId={doodle.userId}
+                doodleId={doodle.doodleId}
                 size='large'
               />
             </a>
@@ -153,7 +154,7 @@ export default class Browse extends React.Component {
               <button className='left-btn' htmlFor='month'>
                 <i className="fas fa-chevron-left"></i>
               </button>
-              <p>
+              <p className='date-pickers-text'>
                 {this.context.monthNames[this.state.month]}
               </p>
               <button className='right-btn' htmlFor='month' >
@@ -164,7 +165,7 @@ export default class Browse extends React.Component {
               <button className='left-btn' htmlFor='date'>
                 <i className="fas fa-chevron-left"></i>
               </button>
-              <p>
+              <p className='date-pickers-text'>
                 {this.state.date}
               </p>
               <button className='right-btn' htmlFor='date' >
@@ -175,7 +176,7 @@ export default class Browse extends React.Component {
               <button className='left-btn' htmlFor='year'>
                 <i className="fas fa-chevron-left"></i>
               </button>
-              <p>
+              <p className='date-pickers-text'>
                 {this.state.year}
               </p>
               <button className='right-btn' htmlFor='year' >

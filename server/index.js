@@ -48,6 +48,23 @@ app.post('/api/doodle', (req, res, next) => {
     });
 });
 
+app.get('/api/userDoodles/:userId', (req, res, next) => {
+  let { userId } = req.params;
+  userId = Number.parseInt(userId);
+  if (!Number.isInteger(userId)) {
+    throw new ClientError(400, 'userId must be an integer');
+  }
+  const sql = `select * from "doodles"
+    where "userId" = $1
+    order by "createdAt" desc, "doodleId" desc;`;
+  const params = [userId];
+  db.query(sql, params)
+    .then(result => {
+      res.json(result.rows);
+    })
+    .catch(error => next(error));
+});
+
 app.get('/api/user/:userId', (req, res, next) => {
   let { userId } = req.params;
   userId = Number.parseInt(userId);
@@ -55,9 +72,7 @@ app.get('/api/user/:userId', (req, res, next) => {
     throw new ClientError(400, 'userId must be an integer');
   }
   const sql = `select * from users
-    join "doodles" using ("userId")
-    where "userId" = $1
-    order by "createdAt" desc;`;
+    where "userId" = $1;`;
   const params = [userId];
   db.query(sql, params)
     .then(result => {
@@ -178,7 +193,7 @@ app.get('/api/doodles/:fullDate', (req, res, next) => {
   const sql = `select * from "doodles"
     join "users" using ("userId")
     where "createdAt"::date = $1
-    order by "createdAt" desc;`;
+    order by "createdAt" desc, "doodleId" desc;`;
   const params = [req.params.fullDate];
   db.query(sql, params)
     .then(result => {

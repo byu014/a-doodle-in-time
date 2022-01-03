@@ -286,7 +286,7 @@ button i {
   margin: 0 1rem 0 0;
 }
 
-.doodle-info > .user-link {
+.doodle-info .user-link-edit {
   margin: 0 0 5rem;
 }
 
@@ -419,10 +419,12 @@ li {
   color: rgba(100, 100, 100, 0.8);
 }
 
+.sign-in-btn-navbar,
 .nav-link {
   transition: transform 0.05s;
 }
 
+.sign-in-btn-navbar:hover,
 .nav-link:hover {
   transform: scale(1.05);
 }
@@ -466,4 +468,24 @@ li {
 
 .active-tab:hover {
   color: white;
+}
+
+.card-edit-btn {
+  opacity: 20%;
+}
+
+.card-edit-btn:hover {
+  opacity: 50%;
+}
+
+.card-edit-btn:active {
+  opacity: 100%;
+}
+
+.date-pickers-text {
+  text-shadow: 0 0 10px black;
+}
+
+.timer {
+  text-align: center;
 }

@@ -7,7 +7,7 @@ export default class Profile extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: null,
+      userData: null,
       activeTab: 'Submissions',
       galleryCardsSubmissions: null,
       galleryCardsFavorites: null
@@ -22,24 +22,27 @@ export default class Profile extends React.Component {
 
   async renderGallery() {
     try {
-      const response = await axios.get(`/api/user/${this.props.userId}`);
-      const galleryCardsSubmissions = response.data.map(doodle => {
+      const responseSubmissions = await axios.get(`/api/userDoodles/${this.props.userId}`);
+      const responseUser = await axios.get(`/api/user/${this.props.userId}`);
+      const galleryCardsSubmissions = responseSubmissions.data.map(doodle => {
         return (
-          <li key={doodle.doodleId} className="li-card">
-            <a className='a-card' href={`#view?doodleId=${doodle.doodleId}`}>
-              <DrawingCard
-                dataUrl={doodle.dataUrl}
-                title={doodle.title}
-                username={doodle.username}
-                pfpUrl={doodle.pfpUrl}
-                userId={doodle.userId}
-                size='small'
-              />
-            </a>
-          </li>
+            <li key={doodle.doodleId} className="li-card">
+              <a className='a-card' href={`#view?doodleId=${doodle.doodleId}`}>
+                <DrawingCard
+                  dataUrl={doodle.dataUrl}
+                  title={doodle.title}
+                  username={responseUser.data[0].username}
+                  pfpUrl={responseUser.data[0].pfpUrl}
+                  userId={doodle.userId}
+                  doodleId={doodle.doodleId}
+                  size='small'
+                />
+              </a>
+            </li>
         );
       });
-      this.setState({ galleryCardsSubmissions, changed: false, data: response.data });
+      this.setState({ galleryCardsSubmissions, userData: responseUser.data });
+
     } catch (err) {
       console.error(err);
       return <div></div>;
@@ -53,16 +56,16 @@ export default class Profile extends React.Component {
   }
 
   render() {
-    if (!this.state.data) {
+    if (!this.state.userData) {
       return <div>loading...</div>;
     }
     return (
       <div className='row'>
         <div className="col-30 artist-info">
-          <img className="large-pfp" src={this.state.data[0].pfpUrl} alt="pfp" />
-          <p className="info-username">{this.state.data[0].username}</p>
-          <p className='info-location'><i className="fas fa-map-marker-alt"></i> {this.state.data[0].location ? this.state.data[0].location : 'Private'}</p>
-          <p className='inf-bio'>{this.state.data[0].bio}</p>
+          <img className="large-pfp" src={this.state.userData[0].pfpUrl} alt="pfp" />
+          <p className="info-username">{this.state.userData[0].username}</p>
+          <p className='info-location'><i className="fas fa-map-marker-alt"></i> {this.state.userData[0].location ? this.state.userData[0].location : 'Private'}</p>
+          <p className='inf-bio'>{this.state.userData[0].bio}</p>
         </div>
         <div className="col-70 artist-gallery">
           <div className="tabs" onClick={this.onTabClick}>

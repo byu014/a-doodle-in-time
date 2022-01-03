@@ -65,7 +65,7 @@ export default class Edit extends React.Component {
     if (event.nativeEvent.submitter.matches('[name="delete"]')) {
       try {
         await axios.delete(`/api/doodle/${this.props.doodleId}`);
-        this.setState({ deletable: false });
+        this.setState({ redirectTo: `#profile?userId=${this.context.userId}` });
       } catch (error) {
         console.error(error);
       }
