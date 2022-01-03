@@ -47,17 +47,20 @@ export default class Browse extends React.Component {
   }
 
   // recursively increases corresponding values as well when selected target value loops to beginning/end
+  // caps the date to the current date/month/year when attempting to go beyond current date
   increase(target) {
     if (target === 'month') {
       const newMonth = (this.state.month + 1) % 12;
       const maxDays = this.maxDaysPerMonth(newMonth, this.state.year);
+      let newYear = this.state.year;
       if (newMonth === 0) {
         if (this.state.year === this.date.getUTCFullYear()) return;
         this.increase('year');
+        newYear = this.state.year + 1 > this.date.getUTCFullYear() ? this.date.getUTCFullYear() : this.state.year + 1;
       }
       this.setState({
-        month: newMonth,
-        date: Math.min(maxDays, this.state.date)
+        month: newYear === this.date.getUTCFullYear() ? Math.min(newMonth, this.date.getUTCMonth()) : newMonth,
+        date: newYear === this.date.getUTCFullYear() ? Math.min(maxDays, this.state.date, this.date.getUTCDate()) : Math.min(maxDays, this.state.date)
       });
     } else if (target === 'date') {
       const maxDays = this.maxDaysPerMonth((this.state.month) % 12, this.state.year);
@@ -67,14 +70,15 @@ export default class Browse extends React.Component {
         this.increase('month');
       }
       this.setState({
-        date: newDate
+        date: this.state.year === this.date.getUTCFullYear() ? Math.min(newDate, this.date.getUTCDate()) : newDate
       });
     } else if (target === 'year') {
       const newYear = this.state.year + 1 > this.date.getUTCFullYear() ? this.date.getUTCFullYear() : this.state.year + 1;
       const maxDays = this.maxDaysPerMonth(this.state.month, newYear);
       this.setState({
         year: newYear,
-        date: Math.min(maxDays, this.state.date)
+        date: newYear === this.date.getUTCFullYear() ? Math.min(maxDays, this.state.date, this.date.getUTCDate()) : Math.min(maxDays, this.state.date),
+        month: newYear === this.date.getUTCFullYear() ? Math.min(this.state.month, this.date.getUTCMonth()) : this.state.month
       });
     }
   }
