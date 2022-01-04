@@ -7,18 +7,43 @@ export default class View extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: null
+      data: null,
+      favorites: null
     };
 
     this.dateConvert = this.dateConvert.bind(this);
+    this.handleFavorite = this.handleFavorite.bind(this);
   }
 
   async componentDidMount() {
     try {
       const response = await axios.get(`/api/doodle/${this.props.doodleId}`);
-      this.setState({ data: response.data });
+      const responseFavorites = await axios.get(`/api/favorites/${this.context.userId}`);
+      const favorites = new Set();
+      responseFavorites.data.forEach(doodle => {
+        favorites.add(doodle.doodleId);
+      });
+      this.setState({ data: response.data, favorites: favorites });
     } catch (error) {
 
+    }
+  }
+
+  async handleFavorite(event) {
+    event.preventDefault();
+    try {
+      await axios.post(`/api/favorite/${this.state.data.doodleId}`, { userId: this.context.userId });
+      if (this.state.favorites.has(this.state.data.doodleId)) {
+        const newFavorites = this.state.favorites;
+        newFavorites.delete(this.state.data.doodleId);
+        this.setState({ favorites: newFavorites });
+      } else {
+        const newFavorites = this.state.favorites;
+        newFavorites.add(this.state.data.doodleId);
+        this.setState({ favorites: newFavorites });
+      }
+    } catch (error) {
+      console.error(error);
     }
   }
 
@@ -32,7 +57,7 @@ export default class View extends React.Component {
   }
 
   render() {
-    if (!this.state.data) {
+    if (!this.state.data || !this.state.favorites) {
       return <div>loading...</div>;
     }
     return (
@@ -52,7 +77,9 @@ export default class View extends React.Component {
           <p className="doodle-caption">{this.state.data.caption}</p>
           <div className='date-favorite-div'>
             <p className='doodle-timestamp'>{this.dateConvert()}</p>
-            <button className='view-heart-btn'><i className="far fa-heart unliked"></i></button>
+            <button onClick={this.handleFavorite} className={`view-heart-btn ${!this.context.userId ? 'hidden' : ''}`}>
+              <i className={`${this.state.favorites.has(this.state.data.doodleId) ? 'liked fas' : 'unliked far '} fa-heart`}></i>
+            </button>
           </div>
         </div>
       </div>

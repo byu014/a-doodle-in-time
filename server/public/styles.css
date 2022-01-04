@@ -303,6 +303,10 @@ button i {
   color: inherit;
 }
 
+.liked {
+  color: rgb(255, 64, 96);
+}
+
 .doodle-title {
   font-size: 3rem;
 }
