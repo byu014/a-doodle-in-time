@@ -23,6 +23,7 @@ export default class Profile extends React.Component {
   async renderGallery() {
     try {
       const responseSubmissions = await axios.get(`/api/userDoodles/${this.props.userId}`);
+      const responseFavorites = await axios.get(`/api/favorites/${this.props.userId}`);
       const responseUser = await axios.get(`/api/user/${this.props.userId}`);
       const galleryCardsSubmissions = responseSubmissions.data.map(doodle => {
         return (
@@ -41,7 +42,28 @@ export default class Profile extends React.Component {
             </li>
         );
       });
-      this.setState({ galleryCardsSubmissions, userData: responseUser.data });
+      const doodleInfoArray = [];
+      for (const doodle of responseFavorites.data) {
+        doodleInfoArray.push(await axios.get(`/api/doodle/${doodle.doodleId}`));
+      }
+      const galleryCardsFavorites = doodleInfoArray.map(doodleInfo => {
+        return (
+            <li key={doodleInfo.doodleId} className="li-card">
+              <a className='a-card' href={`#view?doodleId=${doodleInfo.doodleId}`}>
+                <DrawingCard
+                  dataUrl={doodleInfo.data.dataUrl}
+                  title={doodleInfo.data.title}
+                  username={doodleInfo.data.username}
+                  pfpUrl={doodleInfo.data.pfpUrl}
+                  userId={doodleInfo.data.userId}
+                  doodleId={doodleInfo.data.doodleId}
+                  size='small'
+                />
+              </a>
+            </li>
+        );
+      });
+      this.setState({ galleryCardsSubmissions, userData: responseUser.data, galleryCardsFavorites });
 
     } catch (err) {
       console.error(err);

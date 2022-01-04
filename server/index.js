@@ -22,32 +22,6 @@ app.use(staticMiddleware);
 
 app.use(express.json({ limit: '500mb' }));
 
-app.post('/api/doodle', (req, res, next) => {
-  let { title, caption, dataUrl } = req.body;
-  const userId = 1;// update when adding user auth
-  if (!dataUrl) {
-    throw new ClientError(400, 'dataUrl required');
-  }
-  if (!caption) {
-    caption = '';
-  }
-  if (!title || !title.length) {
-    const date = new Date();
-    title = `${monthNames[date.getUTCMonth()]} ${date.getUTCDate()}, ${date.getUTCFullYear()}`;
-  }
-  const sql = `insert into "doodles" ("title", "caption", "dataUrl", "userId")
-  values ($1, $2, $3, $4)
-  returning *;`;
-  const params = [title, caption, dataUrl, userId];
-  db.query(sql, params)
-    .then(result => {
-      res.json(result.rows[0]);
-    })
-    .catch(error => {
-      next(error);
-    });
-});
-
 app.get('/api/userDoodles/:userId', (req, res, next) => {
   let { userId } = req.params;
   userId = Number.parseInt(userId);
@@ -198,6 +172,96 @@ app.get('/api/doodles/:fullDate', (req, res, next) => {
   db.query(sql, params)
     .then(result => {
       res.json(result.rows);
+    })
+    .catch(error => next(error));
+});
+
+app.get('/api/favorites/:userId', (req, res, next) => {
+  let { userId } = req.params;
+  userId = Number.parseInt(userId);
+  if (!Number.isInteger(userId)) {
+    throw new ClientError(400, 'userId must be an integer');
+  }
+  const sql = `select * from "favorites"
+    join "users" using  ("userId")
+    join "doodles" using ("doodleId")
+    where "favorites"."userId" = $1
+    order by "favoritedAt" desc`;
+  const params = [userId];
+
+  db.query(sql, params)
+    .then(result => {
+      res.json(result.rows);
+    })
+    .catch(error => next(error));
+});
+
+app.post('/api/doodle', (req, res, next) => {
+  let { title, caption, dataUrl } = req.body;
+  const userId = 1;// update when adding user auth
+  if (!dataUrl) {
+    throw new ClientError(400, 'dataUrl required');
+  }
+  if (!caption) {
+    caption = '';
+  }
+  if (!title || !title.length) {
+    const date = new Date();
+    title = `${monthNames[date.getUTCMonth()]} ${date.getUTCDate()}, ${date.getUTCFullYear()}`;
+  }
+  const sql = `insert into "doodles" ("title", "caption", "dataUrl", "userId")
+  values ($1, $2, $3, $4)
+  returning *;`;
+  const params = [title, caption, dataUrl, userId];
+  db.query(sql, params)
+    .then(result => {
+      res.json(result.rows[0]);
+    })
+    .catch(error => {
+      next(error);
+    });
+});
+
+app.post('/api/favorite/:doodleId', (req, res, next) => {
+  let { doodleId } = req.params;
+  doodleId = Number.parseInt(doodleId);
+  if (!Number.isInteger(doodleId)) {
+    throw new ClientError(400, 'doodleId must be an integer');
+  }
+  let { userId } = req.body;
+  userId = Number.parseInt(userId);
+  if (!Number.isInteger(userId)) {
+    throw new ClientError(400, 'userId must be an integer');
+  }
+
+  const sql = `select * from "favorites"
+    where "userId" = $1 and "doodleId" = $2;`;
+  const params = [userId, doodleId];
+
+  db.query(sql, params)
+    .then(result => {
+      if (!result.rows.length) {
+        const sql2 = `insert into "favorites" ("userId", "doodleId")
+          values ($1, $2)
+          returning *;`;
+        const params2 = [userId, doodleId];
+
+        db.query(sql2, params2)
+          .then(result2 => {
+            res.json(result2.rows);
+          })
+          .catch(error => next(error));
+      } else {
+        const sql2 = `delete from "favorites"
+          where "userId" = $1 and "doodleId" = $2
+          returning *;`;
+        const params2 = [userId, doodleId];
+        db.query(sql2, params2)
+          .then(result2 => {
+            res.json(result2.rows);
+          })
+          .catch(error => next(error));
+      }
     })
     .catch(error => next(error));
 });
