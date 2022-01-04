@@ -44,12 +44,14 @@ export default class Profile extends React.Component {
       });
       const doodleInfoArray = [];
       for (const doodle of responseFavorites.data) {
-        doodleInfoArray.push(await axios.get(`/api/doodle/${doodle.doodleId}`));
+        const doodleResponse = await axios.get(`/api/doodle/${doodle.doodleId}`);
+        doodleResponse.data.doodleId = doodle.doodleId;
+        doodleInfoArray.push(doodleResponse);
       }
       const galleryCardsFavorites = doodleInfoArray.map(doodleInfo => {
         return (
             <li key={doodleInfo.doodleId} className="li-card">
-              <a className='a-card' href={`#view?doodleId=${doodleInfo.doodleId}`}>
+              <a className='a-card' href={`#view?doodleId=${doodleInfo.data.doodleId}`}>
                 <DrawingCard
                   dataUrl={doodleInfo.data.dataUrl}
                   title={doodleInfo.data.title}
