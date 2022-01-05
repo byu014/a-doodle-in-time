@@ -311,18 +311,30 @@ app.post('/api/uploadPfp', singleUploadCtrl, async (req, res, next) => {
   }
 
   if (!req.file) {
-    throw new ClientError(404, 'image file required');
+    throw new ClientError(400, 'image file required');
   }
   const file64 = formatBufferTo64(req.file);
   try {
     const uploadResult = await cloudinaryUpload(file64.content);
-    const sql = `update "users"
+    const sql = 'select * from "users" where "userId" = $1';
+    const params = [userId];
+    db.query(sql, params)
+      .then(result => {
+        const pfpUrl = result.rows[0].pfpUrl;
+        let publicId = pfpUrl.split('/');
+        publicId = publicId[publicId.length - 1].split('.')[0];
+        if (publicId !== 'default') {
+          cloudinary.uploader.destroy(`DrawingApp/${publicId}`);
+        }
+      })
+      .catch(error => next(error));
+    const sql2 = `update "users"
       set "pfpUrl" = $1
       where "userId" = $2
       returning *;`;
-    const params = [uploadResult.url, userId];
+    const params2 = [uploadResult.url, userId];
 
-    db.query(sql, params)
+    db.query(sql2, params2)
       .then(result => res.json(result.rows[0]))
       .catch(error => next(error));
 
