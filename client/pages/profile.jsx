@@ -12,8 +12,9 @@ export default class Profile extends React.Component {
       galleryCardsSubmissions: null,
       galleryCardsFavorites: null
     };
-
+    this.fileInputRef = React.createRef();
     this.onTabClick = this.onTabClick.bind(this);
+    this.handleUpload = this.handleUpload.bind(this);
   }
 
   async componentDidMount() {
@@ -73,10 +74,30 @@ export default class Profile extends React.Component {
     }
   }
 
-  onTabClick(event) {
+  async onTabClick(event) {
     if (!event.target.matches('.tab')) return;
     const selectedTab = event.target.getAttribute('tabName');
     this.setState({ activeTab: selectedTab });
+    await this.renderGallery();
+  }
+
+  async handleUpload(event) {
+    const acceptableTypes = new Set(['png', 'jpg', 'jpeg', 'gif']);
+    const fileExt = this.fileInputRef.current.files[0].name.split('.')[1].toLowerCase();
+    if (acceptableTypes.has(fileExt)) {
+      const formData = new FormData();
+      formData.append('image', this.fileInputRef.current.files[0]);
+      formData.append('userId', this.context.userId);
+      const result = await axios.post('/api/uploadPfp', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+      const newUserData = this.state.userData;
+      newUserData[0].pfpUrl = result.data.pfpUrl;
+      await this.renderGallery();
+      this.setState({ userData: newUserData });
+    }
   }
 
   render() {
@@ -86,7 +107,19 @@ export default class Profile extends React.Component {
     return (
       <div className='row'>
         <div className="col-30 artist-info">
-          <img className="large-pfp" src={this.state.userData[0].pfpUrl} alt="pfp" />
+          <form className='pfp' onChange={this.handleUpload} encType="multipart/form-data">
+            <img className="large-pfp" src={this.state.userData[0].pfpUrl} alt="pfp" />
+            <label className={`file-upload ${this.context.userId === this.state.userData[0].userId ? '' : 'hidden'}`} htmlFor="image-upload">
+              Upload Profile Picture
+            </label>
+            <input
+              type="file"
+              name="image"
+              id="image-upload"
+              ref={this.fileInputRef}
+              accept=".png, .jpg, .jpeg, .gif"
+              className='hidden'/>
+          </form>
           <p className="info-username">{this.state.userData[0].username}</p>
           <p className='info-location'><i className="fas fa-map-marker-alt"></i> {this.state.userData[0].location ? this.state.userData[0].location : 'Private'}</p>
           <p className='inf-bio'>{this.state.userData[0].bio}</p>

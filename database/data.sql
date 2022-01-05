@@ -50,7 +50,7 @@ insert into "doodles" ("createdAt", "title", "caption", "dataUrl", "userId")
   values (now()::date - 2, 'watermelon', 'good lookin melon', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS_nGjWq9cThLzs55LiI5QN996sVJsHTNoYQw&usqp=CAU', 8);
 
 insert into "doodles" ("createdAt", "title", "caption", "dataUrl", "userId")
-  values ('2021-12-31'::date, 'rock', 'spooked', 'https://lh3.googleusercontent.com/proxy/Wve2SjLAOmr2WY82V58Ar_e85ni61ZTbgGXhZ699qMKCVmve2xBMx359GoE1kJ4BN-kXn5uSKdeZ6hMkEUf-aosxoOcLJ0JXcCfqmS-gHYjYB8fPldrmBza3TjpbyZbLS3jZ8I3693WAbwpf7n5IRCjaI72PnOjKgu8O7w', 2);
+  values ('2021-12-31'::date, 'rock', 'spooked', 'https://www.pinclipart.com/picdir/big/574-5745181_cute-rock-clipart.png', 2);
 
 insert into "doodles" ("createdAt", "title", "caption", "dataUrl", "userId")
   values ('2021-12-31'::date, 'house', 'small house', 'https://media.istockphoto.com/vectors/home-building-line-icon-editable-stroke-pixel-perfect-for-mobile-and-vector-id1136261351?k=20&m=1136261351&s=612x612&w=0&h=aGBLbFVLgQGt5tFTLM3BKAgOHYBSqijBLd-mpFyMHCU=', 3);

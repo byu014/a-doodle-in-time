@@ -5,15 +5,18 @@ import AppContext from '../lib/app-context';
 export default class Navbar extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { openDrawer: false };
+    this.state = { openDrawer: false, openDropdown: false };
 
     this.handleClick = this.handleClick.bind(this);
   }
 
   handleClick(event) {
+    if (event.target.matches('.dropdown-btn')) {
+      this.setState({ openDropdown: !this.state.openDropdown });
+    }
     if (event.target.matches('#sandwich-btn')) {
       this.setState({ openDrawer: true });
-    } else {
+    } else if (event.target.matches('.modal-menu-bg')) {
       this.setState({ openDrawer: false });
     }
   }
@@ -31,7 +34,13 @@ export default class Navbar extends React.Component {
             <div className='col-half text-shadow nav-items'>
               <a className='nav-link' href="#create" ><i className="far fa-plus-square"></i> Create</a>
               <a className='nav-link' href="#browse" ><i className="far fa-images"></i> Browse</a>
-              <button href="" className="white-btn sign-in-btn-navbar">Sign In</button>
+              <a href={`#profile?userId=${this.context.userId}`} className={`nav-link ${!this.context.userId ? 'hidden' : ''}`}>Profile</a>
+              <button href="" className={`white-btn sign-in-btn-navbar ${this.context.userId ? 'hidden' : ''}`}>Sign In</button>
+              <button href="" className={`dropdown-btn ${!this.context.userId ? 'hidden' : ''}`}><i className="fas fa-sort-down"></i></button>
+              <div className={`dropdown-menu ${this.state.openDropdown ? '' : 'hidden'}`}>
+                <a className='nav-link' href="#settings">Settings</a>
+                <button className='nav-link' href="">Sign Out</button>
+              </div>
             </div>
             <div className="col-half drawer-sandwich">
               <Drawer openDrawer={this.state.openDrawer}/>

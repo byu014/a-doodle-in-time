@@ -24,6 +24,7 @@ export default class App extends React.Component {
      * Each time the window.location.hash changes, parse
      * it with the parseRoute() function and update state
      */
+
     window.addEventListener('hashchange', event => {
       this.setState({ route: parseRoute(window.location.hash) });
     });
@@ -43,7 +44,7 @@ export default class App extends React.Component {
       case 'view':
         return <View doodleId={route.params.get('doodleId')}/>;
       case 'profile':
-        return <Profile userId={route.params.get('userId')}/>;
+        return <Profile key={route.params.get('userId')} userId={route.params.get('userId')}/>;
       default:
         return <NotFound/>;
     }
