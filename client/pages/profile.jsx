@@ -74,21 +74,29 @@ export default class Profile extends React.Component {
     }
   }
 
-  onTabClick(event) {
+  async onTabClick(event) {
     if (!event.target.matches('.tab')) return;
     const selectedTab = event.target.getAttribute('tabName');
     this.setState({ activeTab: selectedTab });
+    await this.renderGallery();
   }
 
-  handleUpload(event) {
+  async handleUpload(event) {
     const acceptableTypes = new Set(['png', 'jpg', 'jpeg', 'gif']);
-    let fileExt = event.currentTarget.querySelector('#image-upload').value.split('\\');
-    fileExt = fileExt[fileExt.length - 1].split('.');
-    fileExt = fileExt[fileExt.length - 1];
+    const fileExt = this.fileInputRef.current.files[0].name.split('.')[1].toLowerCase();
     if (acceptableTypes.has(fileExt)) {
-      // console.log('yes');
-    } else {
-      // console.log('no');
+      const formData = new FormData();
+      formData.append('image', this.fileInputRef.current.files[0]);
+      formData.append('userId', this.context.userId);
+      const result = await axios.post('/api/uploadPfp', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+      const newUserData = this.state.userData;
+      newUserData[0].pfpUrl = result.data.pfpUrl;
+      await this.renderGallery();
+      this.setState({ userData: newUserData });
     }
   }
 

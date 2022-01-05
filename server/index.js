@@ -4,7 +4,36 @@ const express = require('express');
 const ClientError = require('./client-error');
 const errorMiddleware = require('./error-middleware');
 const staticMiddleware = require('./static-middleware');
-// const multer = require('multer');
+const multer = require('multer');
+const path = require('path');
+const DatauriParser = require('datauri/parser');
+const cloudinary = require('cloudinary').v2;
+
+const storage = multer.memoryStorage();
+const ALLOWED_FORMATS = ['image/jpeg', 'image/png', 'image/jpg', 'image/gif'];
+const upload = multer({
+  storage,
+  fileFilter: function (req, file, cb) {
+    if (ALLOWED_FORMATS.includes(file.mimetype)) {
+      cb(null, true);
+    } else {
+      cb(new Error('Not supported file type!'), false);
+    }
+  }
+});
+const singleUpload = upload.single('image');
+const singleUploadCtrl = (req, res, next) => {
+  singleUpload(req, res, error => {
+    if (error) {
+      return res.status(422).send({ message: 'Image upload fail!' });
+    }
+
+    next();
+  });
+};
+const parser = new DatauriParser();
+
+const formatBufferTo64 = file => parser.format(path.extname(file.originalname).toString(), file.buffer);
 
 const db = new pg.Pool(
   {
@@ -13,6 +42,13 @@ const db = new pg.Pool(
 
   }
 );
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET
+});
+const cloudinaryUpload = file => cloudinary.uploader.upload(file, { folder: 'DrawingApp/' });
 
 const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
   'July', 'August', 'September', 'October', 'November', 'December'];
@@ -265,6 +301,35 @@ app.post('/api/favorite/:doodleId', (req, res, next) => {
       }
     })
     .catch(error => next(error));
+});
+
+app.post('/api/uploadPfp', singleUploadCtrl, async (req, res, next) => {
+  let { userId } = req.body;
+  userId = Number.parseInt(userId);
+  if (!Number.isInteger(userId)) {
+    throw new ClientError(400, 'userId must be an integer');
+  }
+
+  if (!req.file) {
+    throw new ClientError(404, 'image file required');
+  }
+  const file64 = formatBufferTo64(req.file);
+  try {
+    const uploadResult = await cloudinaryUpload(file64.content);
+    const sql = `update "users"
+      set "pfpUrl" = $1
+      where "userId" = $2
+      returning *;`;
+    const params = [uploadResult.url, userId];
+
+    db.query(sql, params)
+      .then(result => res.json(result.rows[0]))
+      .catch(error => next(error));
+
+  } catch (error) {
+    next(error);
+  }
+
 });
 
 app.use(errorMiddleware);
