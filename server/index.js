@@ -4,6 +4,7 @@ const express = require('express');
 const ClientError = require('./client-error');
 const errorMiddleware = require('./error-middleware');
 const staticMiddleware = require('./static-middleware');
+// const multer = require('multer');
 
 const db = new pg.Pool(
   {

@@ -12,8 +12,9 @@ export default class Profile extends React.Component {
       galleryCardsSubmissions: null,
       galleryCardsFavorites: null
     };
-
+    this.fileInputRef = React.createRef();
     this.onTabClick = this.onTabClick.bind(this);
+    this.handleUpload = this.handleUpload.bind(this);
   }
 
   async componentDidMount() {
@@ -79,6 +80,18 @@ export default class Profile extends React.Component {
     this.setState({ activeTab: selectedTab });
   }
 
+  handleUpload(event) {
+    const acceptableTypes = new Set(['png', 'jpg', 'jpeg', 'gif']);
+    let fileExt = event.currentTarget.querySelector('#image-upload').value.split('\\');
+    fileExt = fileExt[fileExt.length - 1].split('.');
+    fileExt = fileExt[fileExt.length - 1];
+    if (acceptableTypes.has(fileExt)) {
+      // console.log('yes');
+    } else {
+      // console.log('no');
+    }
+  }
+
   render() {
     if (!this.state.userData) {
       return <div>loading...</div>;
@@ -86,7 +99,19 @@ export default class Profile extends React.Component {
     return (
       <div className='row'>
         <div className="col-30 artist-info">
-          <img className="large-pfp" src={this.state.userData[0].pfpUrl} alt="pfp" />
+          <form className='pfp' onChange={this.handleUpload} encType="multipart/form-data">
+            <img className="large-pfp" src={this.state.userData[0].pfpUrl} alt="pfp" />
+            <label className={`file-upload ${this.context.userId === this.state.userData[0].userId ? '' : 'hidden'}`} htmlFor="image-upload">
+              Upload Profile Picture
+            </label>
+            <input
+              type="file"
+              name="image"
+              id="image-upload"
+              ref={this.fileInputRef}
+              accept=".png, .jpg, .jpeg, .gif"
+              className='hidden'/>
+          </form>
           <p className="info-username">{this.state.userData[0].username}</p>
           <p className='info-location'><i className="fas fa-map-marker-alt"></i> {this.state.userData[0].location ? this.state.userData[0].location : 'Private'}</p>
           <p className='inf-bio'>{this.state.userData[0].bio}</p>

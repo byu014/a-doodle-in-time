@@ -189,6 +189,18 @@ canvas {
   align-items: center;
 }
 
+.pfp {
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+.file-upload {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 @media screen and (min-width: 640px) {
   .container {
     max-width: 730px;
