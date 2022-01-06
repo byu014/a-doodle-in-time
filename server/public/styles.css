@@ -551,3 +551,26 @@ li {
   border-bottom: 2px solid rgba(255, 255, 255, 0.12);
   color: white;
 }
+
+.homepage-title {
+  font-size: 2.25rem;
+}
+
+.homepage-intro > * {
+  margin: 0 0 4rem;
+}
+
+.homepage-create-btn {
+  width: 30rem;
+  margin: 0;
+}
+
+.homepage-image {
+  width: 100%;
+  background: white;
+}
+
+.homepage {
+  position: relative;
+  max-width: 1980px;
+}

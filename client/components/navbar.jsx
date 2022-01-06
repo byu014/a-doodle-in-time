@@ -40,7 +40,7 @@ export default class Navbar extends React.Component {
               </a>
             </div>
             <div className='col-half text-shadow nav-items'>
-              <a className='nav-link' href="#create" ><i className="far fa-plus-square"></i> Create</a>
+              <a className={`nav-link ${!this.context.userId ? 'hidden' : ''}`} href="#create" ><i className="far fa-plus-square"></i> Create</a>
               <a className='nav-link' href="#browse" ><i className="far fa-images"></i> Browse</a>
               <a href={`#profile?userId=${this.context.userId}`} className={`nav-link ${!this.context.userId ? 'hidden' : ''}`}>Profile</a>
               <button href="" className={`white-btn sign-in-btn-navbar ${this.context.userId ? 'hidden' : ''}`}>Sign In</button>
