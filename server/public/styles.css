@@ -524,3 +524,30 @@ li {
   color: inherit;
   cursor: pointer;
 }
+
+.settings-form {
+  margin: 1rem 5rem;
+}
+
+.settings-form > * {
+  margin: 3rem 0;
+}
+
+.settings-form > * > * {
+  margin: 0 1rem;
+}
+
+.bio-settings > textarea {
+  width: 50rem;
+}
+
+.location-settings {
+  width: 10rem;
+  height: 3rem;
+  border-radius: 0.5rem;
+}
+
+.email-settings {
+  border-bottom: 2px solid rgba(255, 255, 255, 0.12);
+  color: white;
+}
