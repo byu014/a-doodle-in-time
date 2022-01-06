@@ -6,8 +6,16 @@ export default class Navbar extends React.Component {
   constructor(props) {
     super(props);
     this.state = { openDrawer: false, openDropdown: false };
-
     this.handleClick = this.handleClick.bind(this);
+  }
+
+  componentDidMount() {
+    document.addEventListener('click', event => {
+      if (!event.target.matches('.dropdown-btn') && !event.target.matches('.dropdown-menu')) {
+        this.setState({ openDropdown: false });
+      }
+    });
+
   }
 
   handleClick(event) {
@@ -16,7 +24,7 @@ export default class Navbar extends React.Component {
     }
     if (event.target.matches('#sandwich-btn')) {
       this.setState({ openDrawer: true });
-    } else if (event.target.matches('.modal-menu-bg')) {
+    } else if (event.target.matches('.modal-menu-bg') || event.target.matches('a') || event.target.matches('button')) {
       this.setState({ openDrawer: false });
     }
   }

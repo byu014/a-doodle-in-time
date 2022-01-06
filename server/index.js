@@ -341,7 +341,26 @@ app.post('/api/uploadPfp', singleUploadCtrl, async (req, res, next) => {
   } catch (error) {
     next(error);
   }
+});
 
+app.patch('/api/user', (req, res, next) => {
+  let { userId, bio, location, email } = req.body;
+  userId = Number.parseInt(userId);
+  if (!Number.isInteger(userId)) {
+    throw new ClientError(400, 'userId must be an integer');
+  }
+  if (!userId || bio === undefined || location === undefined || email === undefined) {
+    throw new ClientError(400, 'userId, bio, location, and email required');
+  }
+  const sql = `update "users"
+    set "bio" = $1, "location" = $2, "email" = $3
+    where "userId" = $4
+    returning *;`;
+  const params = [bio, location, email, userId];
+
+  db.query(sql, params)
+    .then(result => res.json(result.rows[0]))
+    .catch(error => next(error));
 });
 
 app.use(errorMiddleware);
