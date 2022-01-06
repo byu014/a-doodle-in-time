@@ -15,6 +15,10 @@ export default class DrawingCard extends React.Component {
   }
 
   async componentDidMount() {
+    if (!this.context.userId) {
+      this.setState({ favorites: new Set() });
+      return;
+    }
     try {
       const response = await axios.get(`/api/favorites/${this.context.userId}`);
       const favorites = new Set();

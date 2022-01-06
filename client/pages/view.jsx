@@ -16,6 +16,16 @@ export default class View extends React.Component {
   }
 
   async componentDidMount() {
+    if (!this.context.userId) {
+      try {
+        const response = await axios.get(`/api/doodle/${this.props.doodleId}`);
+
+        const favorites = new Set();
+        this.setState({ data: response.data, favorites: favorites });
+      } catch (error) {
+
+      }
+    }
     try {
       const response = await axios.get(`/api/doodle/${this.props.doodleId}`);
       const responseFavorites = await axios.get(`/api/favorites/${this.context.userId}`);

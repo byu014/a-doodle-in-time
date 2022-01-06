@@ -59,6 +59,13 @@ app.use(staticMiddleware);
 
 app.use(express.json({ limit: '500mb' }));
 
+app.get('/api/allDoodles', (req, res, next) => {
+  const sql = 'select * from "doodles"';
+  db.query(sql)
+    .then(result => res.json(result.rows))
+    .catch(error => next(error));
+});
+
 app.get('/api/userDoodles/:userId', (req, res, next) => {
   let { userId } = req.params;
   userId = Number.parseInt(userId);
