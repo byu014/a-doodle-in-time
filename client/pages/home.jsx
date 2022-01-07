@@ -5,7 +5,7 @@ import AppContext from '../lib/app-context';
 export default class Home extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { dataUrl: null };
+    this.state = { dataUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Solid_white.svg/2048px-Solid_white.svg.png' };
   }
 
   async componentDidMount() {

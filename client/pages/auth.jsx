@@ -54,12 +54,12 @@ export default class Auth extends React.Component {
           </div>
           <form className="col-50 auth-right" onSubmit={this.props.type === 'sign-in' ? this.handleSignIn : this.handleSignUp}>
             <div>
-              {this.state.error ? <p>Account already exists</p> : <></>}
+              {this.state.error ? <p>{this.state.error}</p> : <></>}
             </div>
               <p className='auth-header'>{this.props.type === 'sign-in' ? 'Sign in to a Doodle in Time' : 'Create an account!'}</p>
               <div>
                 <label htmlFor="username"><i className="fas fa-user"></i> </label>
-                <input className='auth-input' id='username' name='username' type="text" placeholder='Username' required/>
+                <input className='auth-input' id='username' name='username' type="text" placeholder='Username' required autoComplete='off'/>
               </div>
               <div>
                 <label htmlFor="password-auth"><i className="fas fa-lock"></i> </label>
