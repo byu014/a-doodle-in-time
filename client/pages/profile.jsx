@@ -90,13 +90,15 @@ export default class Profile extends React.Component {
       formData.append('userId', this.context.userId);
       const result = await axios.post('/api/uploadPfp', formData, {
         headers: {
-          'Content-Type': 'multipart/form-data'
+          'Content-Type': 'multipart/form-data',
+          'x-access-token': window.localStorage.getItem('drawing-app-jwt')
         }
       });
       const newUserData = this.state.userData;
       newUserData[0].pfpUrl = result.data.pfpUrl;
       await this.renderGallery();
       this.setState({ userData: newUserData });
+      this.context.pfpChanged = true;
     }
   }
 

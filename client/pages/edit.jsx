@@ -64,7 +64,7 @@ export default class Edit extends React.Component {
     const { dataUrl } = this.context;
     if (event.nativeEvent.submitter.matches('[name="delete"]')) {
       try {
-        await axios.delete(`/api/doodle/${this.props.doodleId}`);
+        await axios.delete(`/api/doodle/${this.props.doodleId}`, { headers: { 'x-access-token': window.localStorage.getItem('drawing-app-jwt') } });
         this.setState({ redirectTo: `#profile?userId=${this.context.userId}` });
       } catch (error) {
         console.error(error);
@@ -73,7 +73,8 @@ export default class Edit extends React.Component {
       try {
         await axios.patch(`/api/doodle/${this.props.doodleId}`, { caption, title, dataUrl }, {
           headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'x-access-token': window.localStorage.getItem('drawing-app-jwt')
           }
         });
         this.setState({ redirectTo: `#view?doodleId=${this.props.doodleId}` });

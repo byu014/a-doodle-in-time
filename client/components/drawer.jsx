@@ -16,9 +16,9 @@ export default class Drawer extends React.Component {
               <a href={`#profile?userId=${this.context.userId}`} className={`${!this.context.userId ? 'hidden' : ''}`}>Profile</a>
             </div>
             <div className="col-full drawer-user-options">
-              <a href="#settings">Settings</a>
-              <button className='nav-link' href="">Sign Out</button>
-              <button href="" className={`white-btn ${this.context.userId ? 'hidden' : ''}`}>Sign In</button>
+              <a href="#settings" className={`${!this.context.userId ? 'hidden' : ''}`}>Settings</a>
+              <a onClick={this.context.handleSignOut} className={`nav-link ${!this.context.userId ? 'hidden' : ''}`} href="#">Sign Out</a>
+              <a href="#auth?type=sign-in" className={`${this.context.userId ? 'hidden' : ''}`}>Sign In</a>
             </div>
           </div>
         </div>

@@ -64,8 +64,8 @@ export default class Canvas extends React.Component {
   }
 
   handleMouseDown(event) {
-    if (event.button !== 0) return;
-    if (event.type !== 'mousedown') {
+    if (event.button !== 0 && !event.touches) return;
+    if (event.type !== 'mousedown' && event.type !== 'touchstart') {
       return;
     }
     this.setState({ isDrawing: true, isMouseDown: true, mid: this.getMousePos(this.canvasRef.current, event) });

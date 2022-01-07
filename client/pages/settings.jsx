@@ -33,7 +33,12 @@ export default class Settings extends React.Component {
       const email = event.target.email.value;
       const bio = event.target.bio.value;
       const location = event.target.location.value;
-      await axios.patch('/api/user', { email, bio, location, userId: this.context.userId });
+      await axios.patch('/api/user', { email, bio, location, userId: this.context.userId }, {
+        headers: {
+          'Content-Type': 'application/json',
+          'x-access-token': window.localStorage.getItem('drawing-app-jwt')
+        }
+      });
       this.setState({ redirectTo: `#profile?userId=${this.context.userId}` });
     } catch (error) {
       console.error(error);
