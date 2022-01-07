@@ -62,7 +62,7 @@ export default class Auth extends React.Component {
                 <input className='auth-input' id='username' name='username' type="text" placeholder='Username' required autoComplete='off'/>
               </div>
               <div>
-                <label htmlFor="password-auth"><i className="fas fa-lock"></i> </label>
+                <label htmlFor="password"><i className="fas fa-lock"></i> </label>
                 <input className='auth-input' id='password' type="password" placeholder='Password' required/>
               </div>
               <button

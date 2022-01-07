@@ -634,6 +634,10 @@ li {
   color: #ccc;
 }
 
+.auth-input:focus {
+  border-bottom: 1px solid #ccc;
+}
+
 .auth-left-info {
   font-size: 1.25rem;
 }
