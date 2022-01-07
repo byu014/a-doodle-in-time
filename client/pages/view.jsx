@@ -42,7 +42,7 @@ export default class View extends React.Component {
   async handleFavorite(event) {
     event.preventDefault();
     try {
-      await axios.post(`/api/favorite/${this.state.data.doodleId}`, { userId: this.context.userId });
+      await axios.post(`/api/favorite/${this.state.data.doodleId}`, { userId: this.context.userId }, { headers: { 'x-access-token': window.localStorage.getItem('drawing-app-jwt') } });
       if (this.state.favorites.has(this.state.data.doodleId)) {
         const newFavorites = this.state.favorites;
         newFavorites.delete(this.state.data.doodleId);

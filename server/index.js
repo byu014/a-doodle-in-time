@@ -291,12 +291,18 @@ app.delete('/api/doodle/:doodleId', (req, res, next) => {
     returning *;`;
   const params = [doodleId];
 
-  db.query(sql, params)
-    .then(result => {
-      if (!result.rows.length) {
-        throw new ClientError(404, `cannot find doodle with doodleId ${doodleId}`);
-      }
-      res.json(result.rows[0]);
+  const sql2 = 'delete from "favorites" where "doodleId" = $1 returning *';
+  const params2 = [doodleId];
+  db.query(sql2, params2)
+    .then(() => {
+      db.query(sql, params)
+        .then(result => {
+          if (!result.rows.length) {
+            throw new ClientError(404, `cannot find doodle with doodleId ${doodleId}`);
+          }
+          res.json(result.rows[0]);
+        })
+        .catch(error => next(error));
     })
     .catch(error => next(error));
 });
