@@ -98,6 +98,7 @@ export default class Profile extends React.Component {
       newUserData[0].pfpUrl = result.data.pfpUrl;
       await this.renderGallery();
       this.setState({ userData: newUserData });
+      this.context.pfpChanged = true;
     }
   }
 

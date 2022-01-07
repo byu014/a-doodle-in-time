@@ -88,7 +88,8 @@ export default class App extends React.Component {
         'July', 'August', 'September', 'October', 'November', 'December'],
       userId: this.state.user ? this.state.user.userId : null,
       handleSignIn: this.handleSignIn,
-      handleSignOut: this.handleSignOut
+      handleSignOut: this.handleSignOut,
+      pfpChanged: false
     };
     return (
       <AppContext.Provider value={contextValue}>

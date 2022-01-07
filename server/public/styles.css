@@ -30,6 +30,7 @@ input {
   border: none;
   background: none;
   font: inherit;
+  touch-action: none;
 }
 
 textarea {
