@@ -95,7 +95,7 @@ export default class App extends React.Component {
       <AppContext.Provider value={contextValue}>
 
       <>
-      <Navbar />
+      <Navbar key={contextValue.userId}/>
       <div className="container">
         {this.renderPage()}
       </div>
