@@ -3,11 +3,14 @@ const pg = require('pg');
 const express = require('express');
 const ClientError = require('./client-error');
 const errorMiddleware = require('./error-middleware');
+const authorizationMiddleware = require('./authorization-middleware');
 const staticMiddleware = require('./static-middleware');
 const multer = require('multer');
 const path = require('path');
 const DatauriParser = require('datauri/parser');
 const cloudinary = require('cloudinary').v2;
+const argon2 = require('argon2');
+const jwt = require('jsonwebtoken');
 
 const storage = multer.memoryStorage();
 const ALLOWED_FORMATS = ['image/jpeg', 'image/png', 'image/jpg', 'image/gif'];
@@ -58,6 +61,62 @@ const app = express();
 app.use(staticMiddleware);
 
 app.use(express.json({ limit: '500mb' }));
+
+app.post('/api/auth/sign-up', (req, res, next) => {
+  const { username, password } = req.body;
+  if (!username || !password) {
+    throw new ClientError(400, 'username and password are required fields');
+  }
+  argon2
+    .hash(password)
+    .then(hashedPassword => {
+      const sql = `
+        insert into "users" ("username", "hashedPassword")
+        values ($1, $2)
+        returning *;
+      `;
+      const params = [username, hashedPassword];
+      return db.query(sql, params);
+    })
+    .then(result => {
+      const [user] = result.rows;
+      res.status(201).json(user);
+    })
+    .catch(err => next(err));
+});
+
+app.post('/api/auth/sign-in', (req, res, next) => {
+  const { username, password } = req.body;
+  if (!username || !password) {
+    throw new ClientError(401, 'invalid login');
+  }
+  const sql = `
+    select "userId",
+           "hashedPassword"
+      from "users"
+     where "username" = $1
+  `;
+  const params = [username];
+  db.query(sql, params)
+    .then(result => {
+      const [user] = result.rows;
+      if (!user) {
+        throw new ClientError(401, 'invalid login');
+      }
+      const { userId, hashedPassword } = user;
+      return argon2
+        .verify(hashedPassword, password)
+        .then(isMatching => {
+          if (!isMatching) {
+            throw new ClientError(401, 'invalid login');
+          }
+          const payload = { userId, username };
+          const token = jwt.sign(payload, process.env.TOKEN_SECRET);
+          res.json({ token, user: payload });
+        });
+    })
+    .catch(err => next(err));
+});
 
 app.get('/api/allDoodles', (req, res, next) => {
   const sql = 'select * from "doodles"';
@@ -142,6 +201,50 @@ app.get('/api/doodle/:doodleId', (req, res, next) => {
     .catch(error => next(error));
 });
 
+app.get('/api/doodles/:fullDate', (req, res, next) => {
+  const fullDate = req.params.fullDate.split('-');
+  if (fullDate.length !== 3) {
+    throw new ClientError(400, 'Date must be in ISO-8601 format (YYYY-MM-DD)');
+  }
+  const [year, month, date] = fullDate.map(val => Number.parseInt(val));
+  if (!Number.isInteger(year) || !Number.isInteger(month) || !Number.isInteger(date)) {
+    throw new ClientError('Year, Month, and Date values must be integers');
+  }
+
+  const sql = `select * from "doodles"
+    join "users" using ("userId")
+    where "createdAt"::date = $1
+    order by "createdAt" desc, "doodleId" desc;`;
+  const params = [req.params.fullDate];
+  db.query(sql, params)
+    .then(result => {
+      res.json(result.rows);
+    })
+    .catch(error => next(error));
+});
+
+app.get('/api/favorites/:userId', (req, res, next) => {
+  let { userId } = req.params;
+  userId = Number.parseInt(userId);
+  if (!Number.isInteger(userId)) {
+    throw new ClientError(400, 'userId must be an integer');
+  }
+  const sql = `select * from "favorites"
+    join "users" using  ("userId")
+    join "doodles" using ("doodleId")
+    where "favorites"."userId" = $1
+    order by "favoritedAt" desc`;
+  const params = [userId];
+
+  db.query(sql, params)
+    .then(result => {
+      res.json(result.rows);
+    })
+    .catch(error => next(error));
+});
+
+app.use(authorizationMiddleware);
+
 app.patch('/api/doodle/:doodleId', (req, res, next) => {
   let { doodleId } = req.params;
   let { title, caption, dataUrl } = req.body;
@@ -194,48 +297,6 @@ app.delete('/api/doodle/:doodleId', (req, res, next) => {
         throw new ClientError(404, `cannot find doodle with doodleId ${doodleId}`);
       }
       res.json(result.rows[0]);
-    })
-    .catch(error => next(error));
-});
-
-app.get('/api/doodles/:fullDate', (req, res, next) => {
-  const fullDate = req.params.fullDate.split('-');
-  if (fullDate.length !== 3) {
-    throw new ClientError(400, 'Date must be in ISO-8601 format (YYYY-MM-DD)');
-  }
-  const [year, month, date] = fullDate.map(val => Number.parseInt(val));
-  if (!Number.isInteger(year) || !Number.isInteger(month) || !Number.isInteger(date)) {
-    throw new ClientError('Year, Month, and Date values must be integers');
-  }
-
-  const sql = `select * from "doodles"
-    join "users" using ("userId")
-    where "createdAt"::date = $1
-    order by "createdAt" desc, "doodleId" desc;`;
-  const params = [req.params.fullDate];
-  db.query(sql, params)
-    .then(result => {
-      res.json(result.rows);
-    })
-    .catch(error => next(error));
-});
-
-app.get('/api/favorites/:userId', (req, res, next) => {
-  let { userId } = req.params;
-  userId = Number.parseInt(userId);
-  if (!Number.isInteger(userId)) {
-    throw new ClientError(400, 'userId must be an integer');
-  }
-  const sql = `select * from "favorites"
-    join "users" using  ("userId")
-    join "doodles" using ("doodleId")
-    where "favorites"."userId" = $1
-    order by "favoritedAt" desc`;
-  const params = [userId];
-
-  db.query(sql, params)
-    .then(result => {
-      res.json(result.rows);
     })
     .catch(error => next(error));
 });
