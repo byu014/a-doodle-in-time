@@ -26,9 +26,9 @@ export default class Home extends React.Component {
       <div className="row homepage">
         <div className='homepage-intro'>
           <p className='homepage-title'>Leave a mark in time with a doodle!</p>
-          <p className='homepage-description'>Create a drawing daily and have your doodle forever recorded
-            in time! It&apos;s like creating global journal entries with people all
-            around the world through doodles!
+          <p className='homepage-description'>Create a drawing daily and have your doodle etched
+            in time! Pick a day and browse through the drawings of people around that world that
+            made a submission on that day!
           </p>
           <div className="homepage-button-div">
             <a href={this.context.userId ? '#create' : '#auth?type=sign-up'} className="blue-btn homepage-create-btn">{this.context.userId ? 'Create!' : 'Sign Up!'}</a>
