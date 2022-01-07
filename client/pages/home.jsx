@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import AppContext from '../lib/app-context';
 
 export default class Home extends React.Component {
   constructor(props) {
@@ -30,7 +31,7 @@ export default class Home extends React.Component {
             around the world through doodles!
           </p>
           <div className="homepage-button-div">
-            <button className="blue-btn homepage-create-btn">Sign Up!</button>
+            <a href={this.context.userId ? '#create' : '#auth?type=sign-up'} className="blue-btn homepage-create-btn">{this.context.userId ? 'Create!' : 'Sign Up!'}</a>
           </div>
         </div>
         <div className="homepage-image-div">
@@ -40,3 +41,5 @@ export default class Home extends React.Component {
     );
   }
 }
+
+Home.contextType = AppContext;

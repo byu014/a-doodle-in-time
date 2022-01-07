@@ -28,18 +28,22 @@ export default class Create extends React.Component {
     const title = event.target.title.value;
     const { dataUrl } = this.context;
     try {
-      const response = await axios.post('/api/doodle', { caption, title, dataUrl }, {
+      const response = await axios.post('/api/doodle', { caption, title, dataUrl, userId: this.context.userId }, {
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'x-access-token': window.localStorage.getItem('drawing-app-jwt')
         }
       });
-      this.setState({ redirectTo: `#view?doodleId=${response.data.doodleId}` });// change to redirect to view page later
+      this.setState({ redirectTo: `#view?doodleId=${response.data.doodleId}` });
     } catch (error) {
       console.error(error);
     }
   }
 
   render() {
+    if (!this.context.userId) {
+      return <Redirect to='#'/>;
+    }
     if (this.state.redirectTo) {
       return <Redirect to={this.state.redirectTo}/>;
     }

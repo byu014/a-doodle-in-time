@@ -9,14 +9,20 @@ import Profile from './pages/profile';
 import Settings from './pages/settings';
 import AppContext from './lib/app-context';
 import { parseRoute } from './lib';
+import decodeToken from './lib/decode-token';
 import { Navbar } from './components';
+import Auth from './pages/auth';
 
 export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      user: null,
+      isAuthorizing: true,
       route: parseRoute(window.location.hash)
     };
+    this.handleSignIn = this.handleSignIn.bind(this);
+    this.handleSignOut = this.handleSignOut.bind(this);
   }
 
   componentDidMount() {
@@ -29,6 +35,20 @@ export default class App extends React.Component {
     window.addEventListener('hashchange', event => {
       this.setState({ route: parseRoute(window.location.hash) });
     });
+    const token = window.localStorage.getItem('drawing-app-jwt');
+    const user = token ? decodeToken(token) : null;
+    this.setState({ user, isAuthorizing: false });
+  }
+
+  handleSignIn(result) {
+    const { user, token } = result;
+    window.localStorage.setItem('drawing-app-jwt', token);
+    this.setState({ user });
+  }
+
+  handleSignOut() {
+    window.localStorage.removeItem('drawing-app-jwt');
+    this.setState({ user: null });
   }
 
   renderPage() {
@@ -48,12 +68,15 @@ export default class App extends React.Component {
         return <Profile key={route.params.get('userId')} userId={route.params.get('userId')}/>;
       case 'settings':
         return <Settings />;
+      case 'auth':
+        return <Auth type={route.params.get('type')}/>;
       default:
         return <NotFound/>;
     }
   }
 
   render() {
+    if (this.state.isAuthorizing) return null;
     const contextValue = {
       dataUrl: null,
       color: '#000000',
@@ -63,7 +86,9 @@ export default class App extends React.Component {
       redoStack: [],
       monthNames: ['January', 'February', 'March', 'April', 'May', 'June',
         'July', 'August', 'September', 'October', 'November', 'December'],
-      userId: 1 // hardcoded,change when update with auth
+      userId: this.state.user ? this.state.user.userId : null,
+      handleSignIn: this.handleSignIn,
+      handleSignOut: this.handleSignOut
     };
     return (
       <AppContext.Provider value={contextValue}>

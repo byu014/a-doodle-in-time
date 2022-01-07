@@ -73,7 +73,8 @@ export default class Edit extends React.Component {
       try {
         await axios.patch(`/api/doodle/${this.props.doodleId}`, { caption, title, dataUrl }, {
           headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'x-access-token': window.localStorage.getItem('drawing-app-jwt')
           }
         });
         this.setState({ redirectTo: `#view?doodleId=${this.props.doodleId}` });

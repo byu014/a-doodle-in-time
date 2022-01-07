@@ -43,11 +43,11 @@ export default class Navbar extends React.Component {
               <a className={`nav-link ${!this.context.userId ? 'hidden' : ''}`} href="#create" ><i className="far fa-plus-square"></i> Create</a>
               <a className='nav-link' href="#browse" ><i className="far fa-images"></i> Browse</a>
               <a href={`#profile?userId=${this.context.userId}`} className={`nav-link ${!this.context.userId ? 'hidden' : ''}`}>Profile</a>
-              <button href="" className={`white-btn sign-in-btn-navbar ${this.context.userId ? 'hidden' : ''}`}>Sign In</button>
+              <a href="#auth?type=sign-in" className={`white-btn sign-in-btn-navbar ${this.context.userId ? 'hidden' : ''}`}>Sign In</a>
               <button href="" className={`dropdown-btn ${!this.context.userId ? 'hidden' : ''}`}><i className="fas fa-sort-down"></i></button>
               <div className={`dropdown-menu ${this.state.openDropdown ? '' : 'hidden'}`}>
                 <a className='nav-link' href="#settings">Settings</a>
-                <button className='nav-link' href="">Sign Out</button>
+                <a className='nav-link' href="#" onClick={this.context.handleSignOut}>Sign Out</a>
               </div>
             </div>
             <div className="col-half drawer-sandwich">

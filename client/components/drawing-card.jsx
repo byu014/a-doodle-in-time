@@ -34,7 +34,12 @@ export default class DrawingCard extends React.Component {
   async handleFavorite(event) {
     event.preventDefault();
     try {
-      await axios.post(`/api/favorite/${this.props.doodleId}`, { userId: this.context.userId });
+      await axios.post(`/api/favorite/${this.props.doodleId}`, { userId: this.context.userId }, {
+        headers: {
+          'Content-Type': 'application/json',
+          'x-access-token': window.localStorage.getItem('drawing-app-jwt')
+        }
+      });
       if (this.state.favorites.has(this.props.doodleId)) {
         const newFavorites = this.state.favorites;
         newFavorites.delete(this.props.doodleId);

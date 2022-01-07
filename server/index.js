@@ -302,8 +302,8 @@ app.delete('/api/doodle/:doodleId', (req, res, next) => {
 });
 
 app.post('/api/doodle', (req, res, next) => {
-  let { title, caption, dataUrl } = req.body;
-  const userId = 1;// update when adding user auth
+  let { title, caption, dataUrl, userId } = req.body;
+  userId = Number.parseInt(userId);
   if (!dataUrl) {
     throw new ClientError(400, 'dataUrl required');
   }
