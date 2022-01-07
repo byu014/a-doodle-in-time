@@ -25,7 +25,7 @@ export default class Home extends React.Component {
     return (
       <div className="row homepage">
         <div className='homepage-intro'>
-          <p className='homepage-title'>Leave a mark in time with a doodle!</p>
+          <p className='homepage-title'>Leave your mark in time with a doodle!</p>
           <p className='homepage-description'>Create a drawing daily and have your doodle etched
             in time! Pick a day and browse through the drawings of people around that world that
             made a submission on that day!
