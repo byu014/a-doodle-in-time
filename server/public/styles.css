@@ -65,10 +65,6 @@ a:hover {
   font-size: 2.25rem;
 }
 
-.logo-name {
-  font-size: 2.25rem;
-}
-
 .nav-items > * {
   margin: auto 1rem;
 }
@@ -105,6 +101,7 @@ a:hover {
   box-shadow: 0 4px 40px 20px rgba(0, 0, 0, 0.1);
   background-color: rgba(119, 242, 255, 0.8);
   color: white;
+  transition: background-color 0.1s;
 }
 
 .red-outline-btn {
@@ -112,6 +109,7 @@ a:hover {
   border: 1px solid red;
   background-color: none;
   color: red;
+  transition: background-color 0.2s, color 0.2s;
 }
 
 .text-shadow {
@@ -128,10 +126,6 @@ a:hover {
 
 .drawer-user-options > button {
   margin: 1rem;
-}
-
-.drawer-nav-items > * {
-  padding: 1rem 5rem;
 }
 
 textarea::placeholder,
@@ -376,6 +370,7 @@ button i {
   right: 1rem;
   padding: 0;
   margin: 0;
+  transition: transform 0.05s;
 }
 
 .card-heart-btn-small {
@@ -385,6 +380,25 @@ button i {
   right: 1rem;
   padding: 0;
   margin: 0;
+  transition: transform 0.05s;
+}
+
+.view-heart-btn {
+  padding: 0;
+  margin: 0;
+  transition: transform 0.05s;
+}
+
+.view-heart-btn:hover,
+.card-heart-btn-large:hover,
+.card-heart-btn-small:hover {
+  transform: scale(1.05);
+}
+
+.view-heart-btn:active,
+.card-heart-btn-large:active,
+.card-heart-btn-small:active {
+  transform: scale(1);
 }
 
 .card-username {
@@ -408,11 +422,6 @@ li {
   position: relative;
 }
 
-.view-heart-btn {
-  padding: 0;
-  margin: 0;
-}
-
 .left-btn,
 .right-btn {
   color: rgba(128, 128, 128, 1);
@@ -429,7 +438,8 @@ li {
 }
 
 .sign-in-btn-navbar,
-.nav-link {
+.nav-link,
+.nav-link-logo {
   transition: transform 0.05s;
   margin: 0;
   border-radius: 0.3rem;
@@ -441,7 +451,11 @@ li {
 
 .sign-in-btn-navbar:hover,
 .nav-link:hover {
-  transform: scale(1.05);
+  transform: scale(1.01);
+}
+
+.nav-link:active {
+  transform: scale(1);
 }
 
 .large-pfp {
@@ -612,6 +626,7 @@ li {
   border-radius: 10rem;
   border: 1px solid white;
   padding: 1rem 5rem;
+  transition: background-color 0.2s;
 }
 
 .auth-right-btn {
@@ -619,6 +634,24 @@ li {
   color: white;
   border-radius: 10rem;
   padding: 1rem 5rem;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.auth-left-btn:hover {
+  background-color: white;
+  color: black;
+}
+
+.auth-right-btn:hover {
+  background-color: #40c2aa;
+}
+
+.auth-left-btn:active {
+  background-color: rgb(228, 228, 228);
+}
+
+.auth-right-btn:active {
+  background-color: #3ab19b;
 }
 
 .auth-right > * {
@@ -648,4 +681,39 @@ li {
 
 .auth-right label {
   color: #ccc;
+}
+
+.blue-btn:hover {
+  background-color: rgba(119, 242, 255, 0.85);
+}
+
+.blue-btn:active {
+  background-color: rgba(119, 242, 255, 0.75);
+}
+
+.drawer-nav-items > *,
+.drawer-user-options > * {
+  padding: 1rem 5rem;
+  width: 15rem;
+  text-align: center;
+  transition: background-color 0.2s;
+}
+
+.drawer-nav-items > *:hover,
+.drawer-user-options > *:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.drawer-nav-items > *:active,
+.drawer-user-options > *:active {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.red-outline-btn:hover {
+  background-color: rgb(255, 0, 0);
+  color: white;
+}
+
+.red-outline-btn:active {
+  background-color: rgb(200, 0, 0);
 }

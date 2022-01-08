@@ -261,6 +261,10 @@ canvas {
   border-radius: 1rem 1rem 0 0;
 }
 
+.logo-name {
+  font-size: 2rem;
+}
+
 @media screen and (min-width: 640px) {
   .container {
     max-width: 730px;
@@ -301,29 +305,33 @@ canvas {
   .doodle-info {
     padding: 1rem 5rem;
   }
-}
 
-.month-picker,
-.year-picker,
-.date-picker {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
+  .month-picker,
+  .year-picker,
+  .date-picker {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 
-.gallery {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-}
+  .gallery {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
 
-.drawing-card {
-  display: flex;
-  flex-direction: column;
-}
+  .drawing-card {
+    display: flex;
+    flex-direction: column;
+  }
 
-.gallery-row {
-  justify-content: center;
+  .gallery-row {
+    justify-content: center;
+  }
+
+  .logo-name {
+    font-size: 2.25rem;
+  }
 }
 
 @media screen and (min-width: 1024px) {

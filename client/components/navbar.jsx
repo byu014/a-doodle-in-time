@@ -61,7 +61,7 @@ export default class Navbar extends React.Component {
         <nav className="container">
           <div className="row">
             <div className="col-half logo">
-              <a className='nav-link' href="#">
+              <a className='nav-link-logo' href="#">
                 <p className="text-shadow logo-name">A Doodle in Time</p>
               </a>
             </div>
