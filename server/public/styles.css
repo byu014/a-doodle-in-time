@@ -4,6 +4,8 @@ body {
   background-attachment: fixed;
   color: white;
   font-family: "Bubblegum Sans", sans-serif;
+
+  /* background by SVGBackgrounds.com */
 }
 
 button {
@@ -595,6 +597,7 @@ li {
 .homepage-image {
   width: 100%;
   background: white;
+  border-radius: 0.5rem;
 }
 
 .homepage {
