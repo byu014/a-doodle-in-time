@@ -265,6 +265,14 @@ canvas {
   font-size: 2rem;
 }
 
+.month-picker,
+.year-picker,
+.date-picker {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 @media screen and (min-width: 640px) {
   .container {
     max-width: 730px;
@@ -304,14 +312,6 @@ canvas {
 
   .doodle-info {
     padding: 1rem 5rem;
-  }
-
-  .month-picker,
-  .year-picker,
-  .date-picker {
-    display: flex;
-    justify-content: center;
-    align-items: center;
   }
 
   .gallery {
