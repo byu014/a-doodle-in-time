@@ -257,7 +257,7 @@ app.patch('/api/doodle/:doodleId', (req, res, next) => {
   }
   if (!title || !title.length) {
     const date = new Date();
-    title = `${monthNames[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
+    title = `${monthNames[date.getMonth()]} ${date.getDate() + 1}, ${date.getFullYear()}`;
   }
 
   doodleId = Number.parseInt(doodleId);
