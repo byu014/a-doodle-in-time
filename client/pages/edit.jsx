@@ -19,6 +19,8 @@ export default class Edit extends React.Component {
       deletable: true,
       redirectTo: null
     };
+
+    this.handleEditable = this.handleEditable.bind(this);
   }
 
   async componentDidMount() {
@@ -85,6 +87,10 @@ export default class Edit extends React.Component {
     }
   }
 
+  handleEditable() {
+    this.setState({ editable: false });
+  }
+
   // TODO assign disabled dynamically to inputs later
   render() {
     if (this.state.redirectTo) {
@@ -100,7 +106,7 @@ export default class Edit extends React.Component {
       <>
       <div className="row">
         <div className="col-full timer-div">
-          <Timer />
+          {this.state.editable ? <Timer handleEditable={this.handleEditable}/> : <></>}
         </div>
       </div>
       <div className="row create">

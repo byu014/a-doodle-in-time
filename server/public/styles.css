@@ -157,8 +157,12 @@ input::placeholder {
   background: rgba(255, 255, 255, 0.1);
 }
 
+.submit-caption-uneditable {
+  background: rgba(255, 255, 255, 0.01);
+}
+
 .submit-caption-uneditable:focus {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.01);
 }
 
 .submit-title-uneditable:focus {

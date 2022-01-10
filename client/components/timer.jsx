@@ -20,14 +20,20 @@ export default class Timer extends React.Component {
     const secondsLeft = 59 - date.getUTCSeconds();
 
     this.setState({
-      timer: `${hoursLeft < 10 ? '0' + hoursLeft.toString() : hoursLeft}:
-    ${minutesLeft < 10 ? '0' + minutesLeft.toString() : minutesLeft}:
-    ${secondsLeft < 10 ? '0' + secondsLeft.toString() : secondsLeft}`
+      timer: `${hoursLeft < 10 ? '0' + hoursLeft.toString() : hoursLeft}:${minutesLeft < 10 ? '0' + minutesLeft.toString() : minutesLeft}:${secondsLeft < 10 ? '0' + secondsLeft.toString() : secondsLeft}`
     });
   }
 
   componentWillUnmount() {
     clearInterval(this.interval);
+  }
+
+  componentDidUpdate(prevProp, prevState) {
+    if (prevState.timer === '00:00:00') {
+      if (this.props.handleEditable) {
+        this.props.handleEditable();
+      }
+    }
   }
 
   render() {
