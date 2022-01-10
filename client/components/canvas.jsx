@@ -138,6 +138,7 @@ export default class Canvas extends React.Component {
     }
     this.ctx.lineTo(x, y);
     this.ctx.stroke();
+    this.ctx.globalAlpha = 1; // prevents changing opacity of entire canvas on undo/redos
     this.setState({ lastX: x, lastY: y });
   }
 
