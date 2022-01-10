@@ -20,7 +20,11 @@ export default class Home extends React.Component {
 
   render() {
     if (!this.state.dataUrl) {
-      return <div>loading...</div>;
+      return (
+        <div className='lds-roller-center'>
+          <div className="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+        </div>
+      );
     }
     return (
       <div className="row homepage">

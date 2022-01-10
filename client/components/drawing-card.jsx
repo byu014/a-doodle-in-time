@@ -56,7 +56,9 @@ export default class DrawingCard extends React.Component {
 
   render() {
     if (!this.state.favorites) {
-      return <div>loading...</div>;
+      return (
+        <div className="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+      );
     }
     return (
       <div className='drawing-card'>

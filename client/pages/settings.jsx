@@ -50,7 +50,11 @@ export default class Settings extends React.Component {
       return <Redirect to={this.state.redirectTo} />;
     }
     if (!this.state.data) {
-      return <div>loading...</div>;
+      return (
+        <div className='lds-roller-center'>
+          <div className="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+        </div>
+      );
     }
     return (
       <form className='row settings-form' onSubmit={this.handleSubmit}>

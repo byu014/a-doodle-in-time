@@ -104,7 +104,11 @@ export default class Profile extends React.Component {
 
   render() {
     if (!this.state.userData) {
-      return <div>loading...</div>;
+      return (
+        <div className='lds-roller-center'>
+          <div className="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+        </div>
+      );
     }
     return (
       <div className='row'>

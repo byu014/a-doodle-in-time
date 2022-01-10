@@ -68,7 +68,11 @@ export default class View extends React.Component {
 
   render() {
     if (!this.state.data || !this.state.favorites) {
-      return <div>loading...</div>;
+      return (
+        <div className='lds-roller-center'>
+          <div className="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+        </div>
+      );
     }
     return (
       <div className="row create">

@@ -100,7 +100,11 @@ export default class Edit extends React.Component {
       return <Redirect to=''/>;
     }
     if (!this.state.dataUrl) {
-      return <div>loading...</div>;
+      return (
+        <div className='lds-roller-center'>
+          <div className="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+        </div>
+      );
     }
     return (
       <>
