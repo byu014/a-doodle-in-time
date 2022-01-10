@@ -65,8 +65,15 @@ export default class ToolPicker extends React.Component {
       const canvas = this.context.canvasRef.current;
       const { width, height } = canvas;
       const ctx = canvas.getContext('2d');
+      const img = new Image();
       this.context.undoStack.push(canvas.toDataURL());
       ctx.clearRect(0, 0, width, height);
+      this.context.undoStack.push(canvas.toDataURL());
+      img.onload = function () {
+        ctx.drawImage(img, 0, 0);
+        this.context.dataUrl = canvas.toDataURL();
+      }.bind(this);
+      img.src = this.context.undoStack.pop();
     }
     if (event.target.matches('#undo')) {
       if (!this.context.undoStack.length) {
