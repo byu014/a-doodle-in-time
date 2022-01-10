@@ -46,7 +46,7 @@ export default class ToolPicker extends React.Component {
   }
 
   handleClick(event) {
-    if (event.target.matches('#dash-toggle')) {
+    if (event.target.matches('#dash-toggle')) { // line style button
       this.context.lineStyle = (this.state.lineStyle + 1) % this.lineStyles.length;
       this.setState({ lineStyle: (this.state.lineStyle + 1) % this.lineStyles.length });
       return;
