@@ -725,6 +725,12 @@ li {
   background-color: rgb(200, 0, 0);
 }
 
+.sigin-note {
+  font-size: 0.8rem;
+  opacity: 0.8;
+  margin-bottom: 0.5rem;
+}
+
 .lds-roller {
   display: inline-block;
   position: relative;

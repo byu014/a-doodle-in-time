@@ -138,11 +138,14 @@ export default class Browse extends React.Component {
       this.setState({ galleryCards, changed: false });
     } catch (err) {
       console.error(err);
-      return <div></div>;
+      this.setState({ error: <div>Network error</div> });
     }
   }
 
   render() {
+    if (this.state.error) {
+      return this.state.error;
+    }
     if (this.state.changed) {
       this.renderGallery();
     }

@@ -34,7 +34,12 @@ export default class Auth extends React.Component {
     try {
       const username = event.target.username.value;
       const password = event.target.password.value;
-      const response = await axios.post('/api/auth/sign-in', { username, password });
+      let response = null;
+      if (!username.length) {
+        response = await axios.post('/api/auth/sign-in', { username: 'Guest', password: 'password' });
+      } else {
+        response = await axios.post('/api/auth/sign-in', { username, password });
+      }
       this.context.handleSignIn(response.data);
       window.location.href = '#';
     } catch (error) {
@@ -57,13 +62,14 @@ export default class Auth extends React.Component {
               {this.state.error ? <p>{this.state.error}</p> : <></>}
             </div>
               <p className='auth-header'>{this.props.type === 'sign-in' ? 'Sign in to a Doodle in Time' : 'Create an account!'}</p>
+              <p className={`sigin-note ${this.props.type === 'sign-in' ? '' : 'hidden'}`}><i>*Leave empty to sign in as guest</i></p>
               <div>
                 <label htmlFor="username"><i className="fas fa-user"></i> </label>
-                <input className='auth-input' id='username' name='username' type="text" placeholder='Username' required autoComplete='off'/>
+                <input className='auth-input' id='username' name='username' type="text" placeholder='Username' autoComplete='off'/>
               </div>
               <div>
                 <label htmlFor="password"><i className="fas fa-lock"></i> </label>
-                <input className='auth-input' id='password' type="password" placeholder='Password' required/>
+                <input className='auth-input' id='password' type="password" placeholder='Password' />
               </div>
               <button
                 className='auth-right-btn'

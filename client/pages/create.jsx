@@ -18,6 +18,7 @@ export default class Create extends React.Component {
       const response = await axios.get(`/api/doodle/today/${this.context.userId}`);
       this.setState({ redirectTo: `#edit?doodleId=${response.data.doodleId}` });
     } catch (error) {
+      this.setState({ error: <div>Network error</div> });
       console.error(error);
     }
   }
@@ -37,6 +38,7 @@ export default class Create extends React.Component {
       this.setState({ redirectTo: `#view?doodleId=${response.data.doodleId}` });
     } catch (error) {
       console.error(error);
+      this.setState({ error: <div>Network error</div> });
     }
   }
 
@@ -46,6 +48,9 @@ export default class Create extends React.Component {
     }
     if (this.state.redirectTo) {
       return <Redirect to={this.state.redirectTo}/>;
+    }
+    if (this.state.error) {
+      return this.state.error;
     }
     return (
       <>

@@ -70,7 +70,7 @@ export default class Profile extends React.Component {
 
     } catch (err) {
       console.error(err);
-      return <div></div>;
+      this.setState({ error: <div>Network error</div> });
     }
   }
 
@@ -82,27 +82,35 @@ export default class Profile extends React.Component {
   }
 
   async handleUpload(event) {
-    const acceptableTypes = new Set(['png', 'jpg', 'jpeg', 'gif']);
-    const fileExt = this.fileInputRef.current.files[0].name.split('.')[1].toLowerCase();
-    if (acceptableTypes.has(fileExt)) {
-      const formData = new FormData();
-      formData.append('image', this.fileInputRef.current.files[0]);
-      formData.append('userId', this.context.userId);
-      const result = await axios.post('/api/uploadPfp', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          'x-access-token': window.localStorage.getItem('drawing-app-jwt')
-        }
-      });
-      const newUserData = this.state.userData;
-      newUserData[0].pfpUrl = result.data.pfpUrl;
-      await this.renderGallery();
-      this.setState({ userData: newUserData });
-      this.context.pfpChanged = true;
+    try {
+      const acceptableTypes = new Set(['png', 'jpg', 'jpeg', 'gif']);
+      const fileExt = this.fileInputRef.current.files[0].name.split('.')[1].toLowerCase();
+      if (acceptableTypes.has(fileExt)) {
+        const formData = new FormData();
+        formData.append('image', this.fileInputRef.current.files[0]);
+        formData.append('userId', this.context.userId);
+        const result = await axios.post('/api/uploadPfp', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            'x-access-token': window.localStorage.getItem('drawing-app-jwt')
+          }
+        });
+        const newUserData = this.state.userData;
+        newUserData[0].pfpUrl = result.data.pfpUrl;
+        await this.renderGallery();
+        this.setState({ userData: newUserData });
+        this.context.pfpChanged = true;
+      }
+    } catch (error) {
+      console.error(error);
+      this.setState({ error: <div>Network error</div> });
     }
   }
 
   render() {
+    if (this.state.error) {
+      return this.state.error;
+    }
     if (!this.state.userData) {
       return (
         <div className='lds-roller-center'>

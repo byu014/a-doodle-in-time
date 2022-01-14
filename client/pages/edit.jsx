@@ -91,7 +91,6 @@ export default class Edit extends React.Component {
     this.setState({ editable: false });
   }
 
-  // TODO assign disabled dynamically to inputs later
   render() {
     if (this.state.redirectTo) {
       return <Redirect to={this.state.redirectTo}/>;
