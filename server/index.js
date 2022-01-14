@@ -406,7 +406,7 @@ app.post('/api/uploadPfp', singleUploadCtrl, async (req, res, next) => {
       set "pfpUrl" = $1
       where "userId" = $2
       returning *;`;
-    const params2 = [uploadResult.url, userId];
+    const params2 = [uploadResult.secure_url, userId];
 
     db.query(sql2, params2)
       .then(result => res.json(result.rows[0]))
