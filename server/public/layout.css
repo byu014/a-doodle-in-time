@@ -282,6 +282,13 @@ canvas {
   height: 100vh;
 }
 
+.empty-gallery {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 10rem;
+}
+
 @media screen and (min-width: 640px) {
   .container {
     max-width: 730px;

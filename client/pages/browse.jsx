@@ -13,7 +13,7 @@ export default class Browse extends React.Component {
       month: this.date.getUTCMonth(),
       date: this.date.getUTCDate(),
       year: this.date.getUTCFullYear(),
-      galleryCards: null,
+      galleryCards: [],
       changed: false
     };
 
@@ -187,7 +187,7 @@ export default class Browse extends React.Component {
         </div>
         <div className="row gallery-row">
             <ul className="col-full gallery">
-              {this.state.galleryCards}
+              {this.state.galleryCards.length ? this.state.galleryCards : <div className='empty-gallery'><p>No submissions on this day</p></div>}
             </ul>
         </div>
       </>

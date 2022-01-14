@@ -9,8 +9,8 @@ export default class Profile extends React.Component {
     this.state = {
       userData: null,
       activeTab: 'Submissions',
-      galleryCardsSubmissions: null,
-      galleryCardsFavorites: null
+      galleryCardsSubmissions: [],
+      galleryCardsFavorites: []
     };
     this.fileInputRef = React.createRef();
     this.onTabClick = this.onTabClick.bind(this);
@@ -136,8 +136,11 @@ export default class Profile extends React.Component {
             <button className={`tab ${this.state.activeTab === 'Favorites' ? 'active-tab' : ''}`} tabName='Favorites'>Favorites</button>
           </div>
           <div className="row gallery-row">
-            <ul className="col-full gallery">
-              {this.state.activeTab === 'Submissions' ? this.state.galleryCardsSubmissions : this.state.galleryCardsFavorites}
+            <ul className={`col-full gallery ${this.state.activeTab === 'Submissions' ? '' : 'hidden'}`}>
+              {this.state.galleryCardsSubmissions.length ? this.state.galleryCardsSubmissions : <div className='empty-gallery'><p>No submissions</p></div> }
+            </ul>
+            <ul className={`col-full gallery ${this.state.activeTab === 'Submissions' ? 'hidden' : ''}`}>
+              {this.state.galleryCardsFavorites.length ? this.state.galleryCardsFavorites : <div className='empty-gallery'><p>No favorites</p></div>}
             </ul>
         </div>
         </div>
