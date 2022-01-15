@@ -405,8 +405,6 @@ canvas {
   .art-tools {
     justify-content: flex-start;
     padding-right: 3rem;
-
-    /* min-width: 410px; */
   }
 
   .art-sliders {
