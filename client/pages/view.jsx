@@ -23,7 +23,7 @@ export default class View extends React.Component {
         const favorites = new Set();
         this.setState({ data: response.data, favorites: favorites });
       } catch (error) {
-
+        console.error(error);
       }
     }
     try {
@@ -35,7 +35,7 @@ export default class View extends React.Component {
       });
       this.setState({ data: response.data, favorites: favorites });
     } catch (error) {
-
+      console.error(error);
     }
   }
 
