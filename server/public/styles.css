@@ -55,7 +55,7 @@ a:hover {
 }
 
 .art-tools > button {
-  flex-basis: 33%;
+  width: 7.2rem;
   color: black;
 }
 

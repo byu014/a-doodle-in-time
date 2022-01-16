@@ -348,6 +348,10 @@ canvas {
   .logo-name {
     font-size: 2.25rem;
   }
+
+  .art-tools {
+    justify-content: flex-start;
+  }
 }
 
 @media screen and (min-width: 1024px) {
