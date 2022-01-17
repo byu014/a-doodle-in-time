@@ -12,7 +12,7 @@ https://a-doodle-in-time.herokuapp.com
 - React.js
 - Express.js
 - Node.js
-- Postgresql
+- PostgreSQL
 - HTML5
 - CSS3
 - argon2
