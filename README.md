@@ -67,20 +67,24 @@ sudo service postgresql start
 ```
 4. create a .env file with the following filled out
 ```
-PORT
-DEV_SERVER_PORT
-TOKEN_SECRET
-DATABASE_URL
-CLOUDINARY_CLOUD_NAME
-CLOUDINARY_API_KEY
-CLOUDINARY_API_SECRET
+DATABASE_URL=postgres://dev:dev@localhost/drawingApp
+PORT=3001
+DEV_SERVER_PORT=3000
+TOKEN_SECRET=<anything>
+CLOUDINARY_CLOUD_NAME=<cloudinary cloud name>
+CLOUDINARY_API_KEY=<cloudinary api key>
+CLOUDINARY_API_SECRET=<cloudinary api secret>
 ```
-5. build with webpack
+5. import the database
+```shell
+npm run db:import
+```
+6. build with webpack
 ```shell
 npm run build
 ```
-6. start the server
+7. start the server
 ```shell
 npm start
 ```
-7. open localhost:3001 in browser
+8. open localhost:3001 in browser
