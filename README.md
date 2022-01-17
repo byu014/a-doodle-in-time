@@ -45,7 +45,6 @@ https://a-doodle-in-time.herokuapp.com
 
 ## Preview
 ![](https://imgur.com/PNCA26G.gif)
-![](https://i.imgur.com/XdoGdvL.gif)
 
 ## Stretch Features
 * User can change password in settings
@@ -66,7 +65,7 @@ npm i
 ```shell
 sudo service postgresql start
 ```
-4. create a .env file with filled out
+4. create a .env file with the following filled out
 ```
 PORT
 DEV_SERVER_PORT
