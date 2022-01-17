@@ -52,6 +52,11 @@ https://a-doodle-in-time.herokuapp.com
 
 ## Development
 
+### System Requirements
+- Node.js 14 or higher
+- NPM 6 or higher
+- Postgresql 12 or higher
+
 ### Getting Started
 1. clone the repo
 ```shell
